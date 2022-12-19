@@ -4,6 +4,7 @@
 // VARIABLES ---------------------------------------------------------------------------------------------------
 // base variables to access DOM
 const header = document.querySelector("header");
+let score = document.querySelector("#score").innerText;
 // colour palette picker - [2, 4, 8.... >2048, emptyTileCol, board/borderCol]
 const bluePalette = [
   "#eef6ff",
@@ -28,7 +29,7 @@ const gridSize = 100;
 const gridBorder = 4;
 const maxInitialTiles = 2;
 const numFontSize = 40;
-// access tiles as arrays for functions
+// access tiles as nested array of Tile classes
 const allTiles = [];
 
 ////////////////////--------------------------------------------------------------------------------------------
@@ -60,11 +61,14 @@ class Tile {
 
   // update tile's value in the DOM whenever it is changed
   updateVal(tileDOM) {
+    // update score
+    document.querySelector("#score").innerText = "" + score;
     // update number display and DOM class
     if (this.num >= 2) {
       tileDOM.innerText = this.num;
       tileDOM.classList.add("t" + this.num);
     } else {
+      tileDOM.innerText = ""; // don't display if number is 0
       tileDOM.style.backgroundColor = colPalette[colPalette.length - 2];
     }
 
@@ -135,7 +139,20 @@ const createTiles = () => {
   }
 
   // generate specific number of tiles to have starting values at random
-  generateNew(2, totalTiles);
+  generateNew(2, countEmpty());
+};
+
+// counts total number of empty tiles left on the board
+const countEmpty = () => {
+  let count = 0;
+  for (let r = 0; r < allTiles.length; r++) {
+    for (let c = 0; c < allTiles[r].length; c++) {
+      if (allTiles[r][c].num === 0) {
+        count++;
+      }
+    }
+  }
+  return count;
 };
 
 // generate new tiles at the end of each sliding step, only true if there are empty tiles
@@ -154,8 +171,6 @@ const generateNew = (tileCount, emptyTiles) => {
   for (let r = 0; r < allTiles.length; r++) {
     for (let c = 0; c < allTiles[r].length; c++) {
       const currTile = allTiles[r][c];
-      console.log(currTile);
-      console.log(remainingTiles);
       // if number of tiles to be filled not achieved, continue running
       if (currCount < tileCount && currTile.num == 0) {
         if (remainingTiles === tileCount - currCount) {
@@ -176,22 +191,83 @@ const generateNew = (tileCount, emptyTiles) => {
   }
 };
 
-// triggers with slideTile(dir), removes 0 and combine val if equivalent, then add 0 to end of array
-const combineTiles = () => {};
+// triggers with slideTile(dir), "flattens" array in a specific direction
+const combineTiles = (dir) => {
+  // creates a new array without the zeroes
+  const filterZero = (row) => row.filter((num) => num !== 0);
+
+  // combines adjacent tile values
+  const combineAdjacent = (row) => {
+    // 1. remove zero => e.g. from [0, 2, 2, 4]
+    let newRow = filterZero(row); // to [2, 2, 4]
+    // 2. check adjacent value and combine
+    for (let c = 0; c < newRow.length - 1; c++) {
+      if (newRow[c] === newRow[c + 1]) {
+        newRow[c] *= 2;
+        newRow[c + 1] = 0; // [2, 2, 4] => [4, 0, 4]
+        score = score * 1 + newRow[c];
+      }
+    }
+    // 3. remove zeroes again
+    newRow = filterZero(newRow); // [4, 4]
+    // 4. add back zeroes to the back
+    while (newRow.length < gridCount) {
+      newRow.push(0);
+    }
+    return newRow;
+  };
+
+  // 1. loop through each row of Tiles to "flatten"
+  for (let r = 0; r < allTiles.length; r++) {
+    let currRow = [];
+    // 2. convert tile class array into array of their numbers
+    for (const t of allTiles[r]) {
+      currRow.push(t.num);
+    }
+    // 3a. manipulate row if slideTile dir is right
+    if (dir === "right") {
+      currRow.reverse();
+    }
+    // 3b. combine values and update as new row
+    const newRow = combineAdjacent(currRow);
+    // 4a. reverse again if slideTile dir is right
+    if (dir === "right") {
+      newRow.reverse();
+    }
+    // 4b. convert numbers back to .num of each tile
+    allTiles[r].map((element, index) => {
+      element.num = newRow[index];
+      element.updateVal(document.querySelector(`#${element.id}`));
+    });
+  }
+  generateNew(1, countEmpty());
+};
 
 // slideTile(dir) {} Logic
 const slideTile = (dir) => {
   // use nested array allTiles to compare row/column
   // use .transpose (map) function to swap row w/ column
   // use .reverse for array in opposite direction
-  if (dir === "right") {
-    // shift tiles right wards (+.reverse())
-  } else if (dir === "up") {
-    // shift tiles upwards (.transpose())
-  } else if (dir === "down") {
-    // shift tiles downwards (.transpose().reverse())
-  }
-  // updateTiles() - leftwards direction is default 2D array arrangement
+  // const reverseArray = (arr) => {
+  //   for (const innerArr of arr) {
+  //     innerArr.reverse();
+  //   }
+  //   return arr;
+  // };
+
+  // if (dir === "right") {
+  //   // shift tiles right wards (+.reverse())
+  //   const reversedTiles = reverseArray(allTiles);
+  //   combineTiles(reversedTiles);
+  //   // } else if (dir === "up") {
+  //   //   // shift tiles upwards (.transpose())
+  //   // } else if (dir === "down") {
+  //   //   // shift tiles downwards (.transpose().reverse())
+  // } else {
+  //   combineTiles(dir);
+  // }
+  // combineTiles() - leftwards direction is default 2D array arrangement
+  combineTiles(dir);
 };
 
 ////////////////////--------------------------------------------------------------------------------------------
