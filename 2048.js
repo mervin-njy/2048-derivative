@@ -6,7 +6,7 @@ const header = document.querySelector("header");
 const gridCount = 4;
 const gridSize = 100;
 const gridBorder = 4;
-const filledTiles = 10;
+const filledTiles = 2;
 // access tiles as arrays for functions
 const allTiles = [];
 
@@ -69,7 +69,7 @@ const createTiles = () => {
   // randomly generate starting tiles with values
   for (let i = 0; i < gridCount * gridCount; i++) {
     let tileVal = 0;
-    if (totalSum < filledTiles * 2 && Math.random() * 10 >= 5) {
+    if (totalSum < filledTiles * 2 && Math.random() * 10 >= 7) {
       tileVal = 2; // randomly assign valued tile
     } else if (totalSum < 2 && i === gridCount * gridCount - 2) {
       tileVal = 2; // set 2nd last tile to 2 if so far there are no valued tile
@@ -82,14 +82,14 @@ const createTiles = () => {
     const col = Math.floor(i / gridCount);
     const newTile = new Tile(row, col, tileVal);
     newTile.constructDOM();
-    if (tileRow.length < gridCount) {
-      tileRow.push(newTile); // row isn't fullly filled yet!
-    } else if (tileRow.length === gridCount) {
+
+    // fill tileRow array until length = gridCount
+    tileRow.push(newTile);
+    // if so, push to main array and empty tileRow for refill
+    if (tileRow.length === gridCount) {
       allTiles.push(tileRow);
-      tileRow = [newTile]; // reset row Array for new row
+      tileRow = []; // reset row Array for new row
     }
-    console.log(i);
-    console.log(allTiles);
   }
 };
 
