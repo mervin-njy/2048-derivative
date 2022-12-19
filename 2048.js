@@ -193,6 +193,8 @@ const generateNew = (tileCount, emptyTiles) => {
 
 // triggers with slideTile(dir), "flattens" array in a specific direction
 const combineTiles = (dir) => {
+  // for transposing array if dir === up and down
+  const transposeArray = () => {};
   // creates a new array without the zeroes
   const filterZero = (row) => row.filter((num) => num !== 0);
 
@@ -224,17 +226,19 @@ const combineTiles = (dir) => {
     for (const t of allTiles[r]) {
       currRow.push(t.num);
     }
-    // 3a. manipulate row if slideTile dir is right
-    if (dir === "right") {
+
+    // 3. combine function
+    if (dir === "left") {
+      // 3a. combine values and update as new row
+      currRow = combineAdjacent(currRow);
+    } else if (dir === "right") {
+      // 3b. manipulate row if slideTile dir is right
+      currRow.reverse();
+      currRow = combineAdjacent(currRow);
       currRow.reverse();
     }
-    // 3b. combine values and update as new row
-    const newRow = combineAdjacent(currRow);
-    // 4a. reverse again if slideTile dir is right
-    if (dir === "right") {
-      newRow.reverse();
-    }
-    // 4b. convert numbers back to .num of each tile
+
+    // 4. convert numbers back to .num of each tile
     allTiles[r].map((element, index) => {
       element.num = newRow[index];
       element.updateVal(document.querySelector(`#${element.id}`));
@@ -245,28 +249,6 @@ const combineTiles = (dir) => {
 
 // slideTile(dir) {} Logic
 const slideTile = (dir) => {
-  // use nested array allTiles to compare row/column
-  // use .transpose (map) function to swap row w/ column
-  // use .reverse for array in opposite direction
-  // const reverseArray = (arr) => {
-  //   for (const innerArr of arr) {
-  //     innerArr.reverse();
-  //   }
-  //   return arr;
-  // };
-
-  // if (dir === "right") {
-  //   // shift tiles right wards (+.reverse())
-  //   const reversedTiles = reverseArray(allTiles);
-  //   combineTiles(reversedTiles);
-  //   // } else if (dir === "up") {
-  //   //   // shift tiles upwards (.transpose())
-  //   // } else if (dir === "down") {
-  //   //   // shift tiles downwards (.transpose().reverse())
-  // } else {
-  //   combineTiles(dir);
-  // }
-  // combineTiles() - leftwards direction is default 2D array arrangement
   combineTiles(dir);
 };
 
