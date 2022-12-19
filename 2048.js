@@ -36,14 +36,17 @@ const allTiles = [];
 // class Tile {} to store tile id and values, combine functions
 class Tile {
   constructor(colInd, rowInd, num = 0) {
-    (this.x = colInd), (this.y = rowInd), (this.num = num);
+    (this.x = colInd),
+      (this.y = rowInd),
+      (this.num = num),
+      (this.id = `t${this.x}${this.y}`);
   }
 
   // construct DOM element with assigned value
   constructDOM() {
     //<div id="x y>">num</div>
     const newTile = document.createElement("div");
-    newTile.id = `t${this.x}${this.y}`;
+    newTile.id = this.id;
     newTile.style.width = gridSize - gridBorder * 2 + "px";
     newTile.style.height = gridSize - gridBorder * 2 + "px";
     newTile.style.border = gridBorder + "px solid";
@@ -138,26 +141,37 @@ const createTiles = () => {
 // generate new tiles at the end of each sliding step, only true if there are empty tiles
 const generateNew = (tileCount, emptyTiles) => {
   let currCount = 0;
-  const randValue = emptyTiles / (totalTiles * 1.2); // lower chance of added value if lesser empty tiles
+  let remainingTiles = totalTiles;
+  // lower chance of added value if lesser empty tiles
+  const randValue = emptyTiles / (totalTiles * 1.2);
+  // function to assign value in the tile's DOM
+  const addVal = (tileToAdd) => {
+    tileToAdd.num = Math.ceil(Math.random() * 2) * 2;
+    tileToAdd.updateVal(document.querySelector("#" + tileToAdd.id));
+    return 1;
+  };
   // loop through all tiles
   for (let r = 0; r < allTiles.length; r++) {
     for (let c = 0; c < allTiles[r].length; c++) {
       const currTile = allTiles[r][c];
       console.log(currTile);
+      console.log(remainingTiles);
       // if number of tiles to be filled not achieved, continue running
-      if (currCount < tileCount) {
-        if (currTile.num === 0 && Math.random() > randValue) {
-          currTile.num = Math.ceil(Math.random() * 2) * 2;
-          currTile.updateVal(
-            document.querySelector("#t" + currTile.x + currTile.y)
-          );
-          currCount++;
-        } else if (r+c){
-
+      if (currCount < tileCount && currTile.num == 0) {
+        if (remainingTiles === tileCount - currCount) {
+          // checks if the number of tiles left in the loop is = tiles to be filled, just assign value
+          // this accounts for last few tiles to be filled
+          currCount += addVal(currTile);
+        } else {
+          // else check for random value before assigning value
+          if (Math.random() > randValue) {
+            currCount += addVal(currTile);
+          }
         }
       } else {
         break;
       }
+      remainingTiles--;
     }
   }
 };
