@@ -39,7 +39,7 @@ h2 {
   color: #17293d;
 }
 
-.t2 {
+/* .t2 {
   background-color: #eef6ff;
   color: #17293d;
 }
@@ -85,14 +85,16 @@ h2 {
 }
 
 .t1024 {
+  font-size: 35px;
   background-color: #17293d;
   color: #ffffff;
 }
 
 .t2048 {
+  font-size: 35px;
   background-color: #09192c;
   color: #ffffff;
-}
+} */
 
 footer {
   width: 500px;

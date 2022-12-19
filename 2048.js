@@ -2,6 +2,19 @@
 
 // base variables to access DOM
 const header = document.querySelector("header");
+const bluePalette = [
+  "#eef6ff",
+  "#cdddee",
+  "#a8c4e4",
+  "#789cc2",
+  "#53779d",
+  "#49688a",
+  "#365375",
+  "#274361",
+  "#183453",
+  "#17293d",
+  "#09192c",
+];
 // base variables to change grid parameters
 const gridCount = 4;
 const gridSize = 100;
@@ -28,6 +41,7 @@ const setBoard = () => {
   newBoard.style.height = gridSize * gridCount + "px";
   newBoard.style.border = gridBorder + "px solid";
   newBoard.style.borderRadius = gridBorder * 2 + "px";
+  newBoard.style.borderColor = "#17293d";
 
   header.after(newBoard);
   // construct tiles after board is set up
@@ -42,6 +56,8 @@ class Tile {
 
   // construct DOM element with assigned value
   constructDOM() {
+    console.log(this.num);
+    //<div id="x y>">num</div>
     const newTile = document.createElement("div");
     newTile.id = this.x + " " + this.y;
     newTile.style.width = gridSize - gridBorder * 2 + "px";
@@ -49,40 +65,55 @@ class Tile {
     newTile.style.border = gridBorder + "px solid";
     newTile.style.borderRadius = gridBorder * 2 + "px";
 
+    // add classes for .tile, and tile+num
     newTile.classList.add("tile");
-    if (this.num !== 0) {
-      newTile.innerText = this.num;
-    }
-    // add class for tile values with 2
-    if (this.num === 2) {
-      newTile.classList.add("t2");
-    }
+    this.updateVal(newTile);
     document.querySelector("#board").append(newTile);
   }
 
-  // update tile's element value
-  updateVal() {}
+  // update tile's value whenever it is changed
+  updateVal(tileDOM) {
+    // fixed border colour
+    tileDOM.style.borderColor = bluePalette[bluePalette.length - 1];
+    if (this.num >= 2) {
+      tileDOM.innerText = this.num;
+      tileDOM.classList.add("t" + this.num);
+    }
+    // change tile colours
+    if (this.num <= 2048) {
+      // Math.log(this.num) / Math.log(2) - 0 is the opposite of math.pow()
+      tileDOM.style.backgroundColor =
+        bluePalette[Math.log(this.num) / Math.log(2) - 1];
+    } else {
+      tileDOM.style.backgroundColor = bluePalette[bluePalette.length - 1];
+    }
+
+    // reduce font size if num is too large
+    if (this.num >= 1024) {
+      tileDOM.style.fontSize = "35px";
+    }
+
+    // after tile 8, the font colour changes to white
+    if (this.num <= Math.pow(2, 3)) {
+      tileDOM.style.color = bluePalette[bluePalette.length - 1];
+    } else {
+      tileDOM.style.color = bluePalette[0];
+    }
+  }
 }
 
 // createTiles() {} logic triggered by setBoard()
 const createTiles = () => {
-  // sum to keep track of total values of all tiles
-  let totalSum = 0;
   // construct array for each row
   let tileRow = [];
   // randomly generate starting tiles with values
   for (let i = 0; i < gridCount * gridCount; i++) {
-    let tileVal = 0;
-    if (totalSum < maxInitialTiles * 2 && Math.random() > 0.7) {
-      tileVal = 2; // randomly assign valued tile
-    } else if (totalSum < 2 && i === gridCount * gridCount - 2) {
-      tileVal = 2; // set 2nd last tile to 2 if so far there are no valued tile
-    } else if (totalSum < 4 && i === gridCount * gridCount - 1) {
-      tileVal = 2; // set last tile to 2 if only one so far
-    }
-    totalSum += tileVal;
     // construct new tile class to store index and value (col (x), row (y), num)
-    const newTile = new Tile(i % gridCount, Math.floor(i / gridCount), tileVal);
+    const newTile = new Tile(
+      i % gridCount,
+      Math.floor(i / gridCount),
+      Math.pow(2, i)
+    );
     newTile.constructDOM();
 
     // fill tileRow array until length = gridCount
