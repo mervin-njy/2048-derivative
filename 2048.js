@@ -15,11 +15,12 @@ const bluePalette = [
   "#17293d",
   "#09192c",
 ];
-// base variables to change grid parameters
+// base variables to change grid/tile parameters
 const gridCount = 4;
 const gridSize = 100;
 const gridBorder = 4;
 const maxInitialTiles = 2;
+const numFontSize = 40;
 // access tiles as arrays for functions
 const allTiles = [];
 
@@ -56,7 +57,6 @@ class Tile {
 
   // construct DOM element with assigned value
   constructDOM() {
-    console.log(this.num);
     //<div id="x y>">num</div>
     const newTile = document.createElement("div");
     newTile.id = this.x + " " + this.y;
@@ -71,7 +71,7 @@ class Tile {
     document.querySelector("#board").append(newTile);
   }
 
-  // update tile's value whenever it is changed
+  // update tile's value in the DOM whenever it is changed
   updateVal(tileDOM) {
     // fixed border colour
     tileDOM.style.borderColor = bluePalette[bluePalette.length - 1];
@@ -89,8 +89,11 @@ class Tile {
     }
 
     // reduce font size if num is too large
-    if (this.num >= 1024) {
-      tileDOM.style.fontSize = "35px";
+    if (this.num.toString().length <= 3) {
+      tileDOM.style.fontSize = numFontSize;
+    } else {
+      tileDOM.style.fontSize =
+        numFontSize - this.num.toString().length * 2 + "px";
     }
 
     // after tile 8, the font colour changes to white
