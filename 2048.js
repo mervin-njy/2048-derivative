@@ -68,7 +68,7 @@ class Tile {
       tileDOM.innerText = this.num;
       tileDOM.classList.add("t" + this.num);
     } else {
-      tileDOM.innerText = ""; // don't display if number is 0
+      tileDOM.innerText = ""; // don't display if number is 1 or math.pow(2,1)
       tileDOM.style.backgroundColor = colPalette[colPalette.length - 2];
     }
 
