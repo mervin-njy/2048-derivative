@@ -21,23 +21,19 @@ h2 {
 #board {
   display: flex;
   flex-wrap: wrap;
-  width: 400px;
-  height: 400px;
-  border: 3px solid;
-  border-color: #3c1f4b;
+  border-color: #461f59;
   margin: 30px auto;
-  background-color: #3c1f4b;
+  background-color: #461f59;
 }
 
 .tile {
-  width: 94px;
-  height: 94px;
-  border: 3px;
+  border-color: #461f59;
   background-color: #eadaf3;
-  margin: 3px;
 
-  text-align: center;
-  vertical-align: middle;
+  /* fix vertical alignment issue */
+  font-size: 40px;
+  font-weight: 600;
+  color: #461f59;
 }
 
 footer {
@@ -46,7 +42,7 @@ footer {
   text-align: left;
 }
 
-h3 {
+h4 {
   font-size: 18px;
   font-weight: 500;
 }
