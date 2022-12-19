@@ -6,7 +6,7 @@ const header = document.querySelector("header");
 const gridCount = 4;
 const gridSize = 100;
 const gridBorder = 4;
-const filledTiles = 2;
+const maxInitialTiles = 2;
 // access tiles as arrays for functions
 const allTiles = [];
 
@@ -40,6 +40,7 @@ class Tile {
     (this.x = colInd), (this.y = rowInd), (this.num = num);
   }
 
+  // construct DOM element with assigned value
   constructDOM() {
     const newTile = document.createElement("div");
     newTile.id = this.x + " " + this.y;
@@ -58,6 +59,9 @@ class Tile {
     }
     document.querySelector("#board").append(newTile);
   }
+
+  // update tile's element value
+  updateVal() {}
 }
 
 // createTiles() {} logic triggered by setBoard()
@@ -69,7 +73,7 @@ const createTiles = () => {
   // randomly generate starting tiles with values
   for (let i = 0; i < gridCount * gridCount; i++) {
     let tileVal = 0;
-    if (totalSum < filledTiles * 2 && Math.random() * 10 >= 7) {
+    if (totalSum < maxInitialTiles * 2 && Math.random() > 0.7) {
       tileVal = 2; // randomly assign valued tile
     } else if (totalSum < 2 && i === gridCount * gridCount - 2) {
       tileVal = 2; // set 2nd last tile to 2 if so far there are no valued tile
@@ -77,10 +81,8 @@ const createTiles = () => {
       tileVal = 2; // set last tile to 2 if only one so far
     }
     totalSum += tileVal;
-    // construct new tile class to store index and value
-    const row = i % gridCount;
-    const col = Math.floor(i / gridCount);
-    const newTile = new Tile(row, col, tileVal);
+    // construct new tile class to store index and value (col (x), row (y), num)
+    const newTile = new Tile(i % gridCount, Math.floor(i / gridCount), tileVal);
     newTile.constructDOM();
 
     // fill tileRow array until length = gridCount
@@ -93,17 +95,28 @@ const createTiles = () => {
   }
 };
 
+const generateNew = (tileCount) => {
+  const currCount = 0;
+  // loop through all tiles with val = 0
+  // if currCount < tileCount
+  // math.random() to add 2 or 4
+  // else
+  // break;
+};
+
 // slideTile(dir) {} Logic
 const slideTile = (dir) => {
-  if (dir === "down") {
-    // shift tiles downwards
+  // use nested array allTiles to compare row/column
+  // use .transpose (map) function to swap row w/ column
+  // use .reverse for array in opposite direction
+  if (dir === "right") {
+    // shift tiles right wards (+.reverse())
   } else if (dir === "up") {
-    // shift tiles upwards
-  } else if (dir === "left") {
-    // shift tiles leftwards
-  } else {
-    // shift tiles rightwards
+    // shift tiles upwards (.transpose())
+  } else if (dir === "down") {
+    // shift tiles downwards (.transpose().reverse())
   }
+  // updateTiles() - leftwards direction is default 2D array arrangement
 };
 
 // eventListener: keypress for sliding tiles

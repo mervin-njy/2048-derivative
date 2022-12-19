@@ -30,7 +30,8 @@ h2 {
   border-color: #17293d;
   background-color: #888f96;
 
-  /* fix vertical alignment issue */
+  /* alignment to the middle of tile */
+  display: flex;
   justify-content: center;
   align-items: center;
   font-size: 40px;
