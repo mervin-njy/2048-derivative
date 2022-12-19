@@ -21,19 +21,76 @@ h2 {
 #board {
   display: flex;
   flex-wrap: wrap;
-  border-color: #461f59;
+  border-color: #17293d;
   margin: 30px auto;
-  background-color: #461f59;
+  background-color: #17293d;
 }
 
 .tile {
-  border-color: #461f59;
-  background-color: #eadaf3;
+  border-color: #17293d;
+  background-color: #888f96;
 
   /* fix vertical alignment issue */
+  justify-content: center;
+  align-items: center;
   font-size: 40px;
   font-weight: 600;
-  color: #461f59;
+  color: #17293d;
+}
+
+.t2 {
+  background-color: #eef6ff;
+  color: #17293d;
+}
+
+.t4 {
+  background-color: #cdddee;
+  color: #17293d;
+}
+
+.t8 {
+  background-color: #a8c4e4;
+  color: #17293d;
+}
+
+.t16 {
+  background-color: #789cc2;
+  color: #ffffff;
+}
+
+.t32 {
+  background-color: #53779d;
+  color: #ffffff;
+}
+
+.t64 {
+  background-color: #49688a;
+  color: #ffffff;
+}
+
+.t128 {
+  background-color: #365375;
+  color: #ffffff;
+}
+
+.t256 {
+  background-color: #274361;
+  color: #ffffff;
+}
+
+.t512 {
+  background-color: #183453;
+  color: #ffffff;
+}
+
+.t1024 {
+  background-color: #17293d;
+  color: #ffffff;
+}
+
+.t2048 {
+  background-color: #09192c;
+  color: #ffffff;
 }
 
 footer {
