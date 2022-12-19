@@ -21,15 +21,11 @@ h2 {
 #board {
   display: flex;
   flex-wrap: wrap;
-  border-color: #17293d;
   margin: 30px auto;
   background-color: #17293d;
 }
 
 .tile {
-  border-color: #17293d;
-  background-color: #888f96;
-
   /* alignment to the middle of tile */
   display: flex;
   justify-content: center;
