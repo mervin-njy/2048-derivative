@@ -192,57 +192,27 @@ const generateNew = (tileCount, emptyTiles) => {
 };
 
 // triggers with slideTile(dir), "flattens" array in a specific direction
-const combineTiles = (dir) => {
+const combineTiles = (row) => {
   // creates a new array without the zeroes
   const filterZero = (row) => row.filter((num) => num !== 0);
 
-  // combines adjacent tile values
-  const combineAdjacent = (row) => {
-    // 1. remove zero => e.g. from [0, 2, 2, 4]
-    let newRow = filterZero(row); // to [2, 2, 4]
-    // 2. check adjacent value and combine
-    for (let c = 0; c < newRow.length - 1; c++) {
-      if (newRow[c] === newRow[c + 1]) {
-        newRow[c] *= 2;
-        newRow[c + 1] = 0; // [2, 2, 4] => [4, 0, 4]
-        score = score * 1 + newRow[c];
-      }
+  // 1. remove zero => e.g. from [0, 2, 2, 4]
+  let newRow = filterZero(row); // to [2, 2, 4]
+  // 2. check adjacent value and combine
+  for (let c = 0; c < newRow.length - 1; c++) {
+    if (newRow[c] === newRow[c + 1]) {
+      newRow[c] *= 2;
+      newRow[c + 1] = 0; // [2, 2, 4] => [4, 0, 4]
+      score = score * 1 + newRow[c];
     }
-    // 3. remove zeroes again
-    newRow = filterZero(newRow); // [4, 4]
-    // 4. add back zeroes to the back
-    while (newRow.length < gridCount) {
-      newRow.push(0);
-    }
-    return newRow;
-  };
-
-  // 1. loop through each row of Tiles to "flatten"
-  for (let r = 0; r < allTiles.length; r++) {
-    let currRow = [];
-    // 2. convert tile class array into array of their numbers
-    for (const t of allTiles[r]) {
-      currRow.push(t.num);
-    }
-
-    // 3. combine function
-    if (dir === "left") {
-      // 3a. combine values and update as new row
-      currRow = combineAdjacent(currRow);
-    } else if (dir === "right") {
-      // 3b. manipulate row if slideTile dir is right
-      currRow.reverse();
-      currRow = combineAdjacent(currRow);
-      currRow.reverse();
-    }
-
-    // 4. convert numbers back to .num of each tile
-    allTiles[r].map((element, index) => {
-      element.num = currRow[index];
-      element.updateVal(document.querySelector(`#${element.id}`));
-    });
   }
-  generateNew(1, countEmpty());
+  // 3. remove zeroes again
+  newRow = filterZero(newRow); // [4, 4]
+  // 4. add back zeroes to the back
+  while (newRow.length < gridCount) {
+    newRow.push(0);
+  }
+  return newRow;
 };
 
 // slideTile(dir) {} Logic
@@ -259,15 +229,60 @@ const slideTile = (dir) => {
         }
       }
     }
+    return newArray;
   };
 
-  // if (dir === "Up" || dir === "down") {
-  //   for (let r = 0; r < allTiles.length; r++) {
-  //     let transposedRow = [allTiles[0][r], allTiles[1][r]];
-  //   }
-  // }
+  // for updating values to tiles
+  const refreshTile = (innerArr, valueArr) => {
+    innerArr.map((element, index) => {
+      element.num = valueArr[index];
+      element.updateVal(document.querySelector(`#${element.id}`));
+    });
+  };
 
-  combineTiles(dir);
+  const arr = allTiles;
+
+  // if up or down, transpose nested array before starting
+  if (dir === "up" || dir === "down") {
+    arr = transposeArray(allTiles);
+  }
+
+  // 1. loop through each row of Tiles to "flatten"
+  let valueNestedArray = [];
+  for (let r = 0; r < arr.length; r++) {
+    let currRow = []; // empty array to store values themselves
+    // 2. convert tile class array into array of their numbers
+    for (const t of arr[r]) {
+      currRow.push(t.num);
+    }
+
+    // 3. combine function
+    if (dir === "left" || dir === "up") {
+      currRow = combineTiles(currRow); // returns flattened array
+    } else if (dir === "right" || dir === "down") {
+      currRow.reverse();
+      currRow = combineTiles(currRow); // returns flattened array
+      currRow.reverse();
+    }
+
+    if (r === arr.length - 1) {
+      valueNestedArray.push(currRow);
+    }
+  }
+
+  // if up or down transpose again, after completion before updating values
+  if (dir === "up" || dir === "down") {
+    valueNestedArray = transposeArray(valueNestedArray);
+  }
+
+  // refresh tile values
+  for (let r = 0; r < arr.length; r++) {
+    refreshTile(arr[r], valueNestedArray[r]);
+  }
+
+  // 4. convert numbers back to .num of each tile
+
+  generateNew(1, countEmpty());
 };
 
 ////////////////////--------------------------------------------------------------------------------------------
