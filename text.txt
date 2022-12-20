@@ -40,6 +40,7 @@ Stretch goals:
 Issues to fix: 
 
 1. keypress (keyup) down and up arrow keys will also scroll browser
+https://www.w3schools.com/cssref/css3_pr_overflow-y.php
 
 -------------------------------------------------------------------------------------------------------------------------------------------
 Describing process:
