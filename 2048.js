@@ -228,7 +228,9 @@ const generateNew = (tileCount, emptyTiles) => {
     return 1;
   };
 
+  // get empty tiles to choose from
   const allEmpty = emptyTileArray(allTiles);
+  // randomly assign tiles with values n times
   for (let i = 0; i < tileCount; i++) {
     const randomTileIndex = Math.floor(Math.random() * (emptyTiles - i));
     addVal(allEmpty[randomTileIndex]);
@@ -236,7 +238,7 @@ const generateNew = (tileCount, emptyTiles) => {
   }
 };
 
-// triggers with slideTile(dir), "flattens" array in a specific direction
+// triggers with slide(dir), "flattens" array in a specific direction
 const combineTiles = (row) => {
   // creates a new array without the zeroes
   const filterZero = (arr) => arr.filter((num) => num !== 0);
@@ -260,8 +262,8 @@ const combineTiles = (row) => {
   return newRow;
 };
 
-// slideTile(dir) {} Logic
-const slideTile = (dir) => {
+// slide(dir) {} Logic
+const slide = (dir) => {
   // for transposing array if dir === up and down
   const transposeArray = (nestedArray) => {
     const newArray = [];
@@ -321,7 +323,7 @@ const slideTile = (dir) => {
       // 3a. combine values and update as new row
       currRow = combineTiles(currRow);
     } else if (dir === "right" || "down") {
-      // 3b. manipulate row if slideTile dir is right
+      // 3b. manipulate row if slide dir is right
       currRow.reverse();
       currRow = combineTiles(currRow);
       currRow.reverse();
@@ -370,23 +372,23 @@ window.addEventListener(
 
     switch (event.key) {
       case "ArrowDown":
-        // slideTile(down)
-        slideTile("down");
+        // slide(down)
+        slide("down");
         console.log("sliding down");
         break;
       case "ArrowUp":
-        // slideTile(up)
-        slideTile("up");
+        // slide(up)
+        slide("up");
         console.log("sliding up");
         break;
       case "ArrowLeft":
-        // slideTile(left)
-        slideTile("left");
+        // slide(left)
+        slide("left");
         console.log("sliding left");
         break;
       case "ArrowRight":
-        // slideTile(right)
-        slideTile("right");
+        // slide(right)
+        slide("right");
         console.log("sliding right");
         break;
       case "Escape":

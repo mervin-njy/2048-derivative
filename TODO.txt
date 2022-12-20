@@ -1,9 +1,62 @@
+Steps to MVP:
+
+HTML: -------------------------------------------------------------------------------------------------------------------------------------
+1. header
+    a. title of game
+    b. score with a span of score value to be updated
+
+2. div: board + tile 
+    a. to be created in javascript onload since we want to be able to reset larger board for stretch goals
+
+3. footer: instructions
+    a. h4: How to play
+    b. instructions with placeholder first
+
+4. etc.
+    a. style and script sources
+
+CSS: --------------------------------------------------------------------------------------------------------------------------------------
+1. font
+2. display flex for divs
+
+javascript: -------------------------------------------------------------------------------------------------------------------------------
+1. setting up
+    a. setBoard() => creates board div DOM and updates style
+    b. createTiles() => class Tile (this.id, this.num)
+        i. Tile.createDOM() => initiates tile styling properties on DOM element
+        ii. Tile.updateDOM() => updates style properties based on value changes
+
+2. reusable functions for DOM manipulation
+    a. countTileValue(val) => counts number of tiles with specific value (useful for multiple scenarios)
+    b. generateNew(count) => randomly generate new tile at the end of each turn
+        i. emptyTileArray() => returns array of empty tiles to generate based on count
+        ii. addVal() => resets Tile.num and uses Tile.updateDOM() to update value in the DOM
+
+3. main functions for game actions
+    a. slide(dir) => manipulates nested array based on dir
+        i. if left: combineTiles()
+        ii. if right: reverse() + combineTiles() + reverse()
+        iii. if up: transpose() + combineTiles() + tranpose()
+        iv. if down: transpose() + reverse() + combineTiles() + reverse() + tranpose()
+        v. tranpose() => nested array to switch between col and row
+        // new: checkDuplicate() to see if there are any changes before and after slide
+        vii. if same, don't Tile.updateDOM(), else Tile.updateDOM()
+    b. combineTiles()
+        i. filterZero()
+        ii. for loop to combine adjacent values if they are the same, replace next with 0
+
+4. windows.addEventListener()
+    a. onload => setBoard()
+    b. keyup => slide(dir = arrowkey)
+    // new: keydown => prevent default action of moving scroll bars (keydown triggered for keyup to be triggered)
+
+^ MVP achieved! ^ -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------------------------
 Remaining tasks:
 
 // DONE
 // . disallow generateNew() if array before = after
-//    a. last part of slideTile(), before remapping values to DOM's properties, add a compareArray()
+//    a. last part of slide(), before remapping values to DOM's properties, add a checkDuplicate()
 
 // . change generateNew() tile selection criteria
 //    a. currently goes through the loop and feed random value
