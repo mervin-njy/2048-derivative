@@ -7,51 +7,51 @@ const header = document.querySelector("header");
 let score = document.querySelector("#score").innerText;
 // colour palette picker - [2, 4, 8.... >2048, emptyTileCol, board/borderCol]
 const bluePalette = [
-  "#eef6ff",
-  "#cdddee",
-  "#a8c4e4",
-  "#789cc2",
-  "#53779d",
-  "#49688a",
-  "#365375",
-  "#274361",
-  "#183453",
-  "#17293d",
-  "#09192c",
-  "#929ca7",
-  "#283845",
+  "#eef6ff", // 2 + later font colors
+  "#cdddee", // 4
+  "#a8c4e4", // 8
+  "#789cc2", // 16
+  "#53779d", // 32
+  "#416082", // 64
+  "#274361", // 128
+  "#183453", // 256
+  "#11263E", // 512
+  "#0B1A2C", // 1024
+  "#050F1D", // >= 2048 + earlier font colors
+  "#929ca7", // 0
+  "#283845", // border colour
 ];
 const greenPalette = [
-  "#E1F6E6",
-  "#BEDEC8",
-  "#A1C3B4",
-  "#82ABA1",
-  "#53779d",
-  "#63A091",
-  "#4D9587",
-  "#368A7C",
-  "#328071",
-  "#2E7565",
-  "#26604E",
-  "#80918C",
-  "#0C2C22",
+  "#D5EFF0", // 2 + later font colors
+  "#AACECE", // 4
+  "#80B5B5", // 8
+  "#6EA0A0", // 16
+  "#598E8E", // 32
+  "#497D7D", // 64
+  "#3C7373", // 128
+  "#336969", // 256
+  "#285B5B", // 512
+  "#214E4E", // 1024
+  "#1B3333", // >= 2048 + earlier font colors
+  "#80918C", // 0
+  "#284445", // border colour
 ];
 const purplePalette = [
-  "#F7EDFF",
-  "#D8C5E9",
-  "#CBB0DD",
-  "#BD9CD5",
-  "#B488D5",
-  "#A778CB",
-  "#9B6CBF",
-  "#8E5BB5",
-  "#704095",
-  "#55267A",
-  "#421962",
-  "#C6BECC",
-  "#1B092A",
+  "#F7EDFF", // 2 + later font colors
+  "#E8DFF8", // 4
+  "#DED0F5", // 8
+  "#C8B8E2", // 16
+  "#B0A0CB", // 32
+  "#9E8DBA", // 64
+  "#84759A", // 128
+  "#6B5C82", // 256
+  "#53456A", // 512
+  "#44365B", // 1024
+  "#1B1425", // >= 2048 + earlier font colors
+  "#978E9F", // 0
+  "#332845", // border colour
 ];
-const colPalette = bluePalette;
+const colPalette = purplePalette;
 // base variables to change grid/tile parameters
 const gridCount = 4;
 const totalTiles = gridCount * gridCount;
@@ -165,7 +165,12 @@ const createTiles = () => {
   // randomly generate starting tiles with empty values
   for (let i = 0; i < totalTiles; i++) {
     // construct new tile class to store index and value (col (x), row (y), num)
-    const newTile = new Tile(i % gridCount, Math.floor(i / gridCount));
+    const newTile = new Tile(
+      i % gridCount,
+      Math.floor(i / gridCount),
+      Math.pow(2, i)
+    );
+    // num = Math.pow(2, i) to see values with colours
     newTile.constructDOM();
 
     // fill tileRow array until length = gridCount
@@ -198,16 +203,19 @@ const countTileValue = (val) => {
 
 // generate new tiles at the end of each sliding step, only true if there are empty tiles
 const generateNew = (tileCount, emptyTiles) => {
+  // variables for assessing board's tiles condition
   let currCount = 0;
   let remainingTiles = totalTiles; // counts remaining tiles in the loop
   // lower chance of added value if lesser empty tiles
   const randValue = emptyTiles / (totalTiles * 1.2);
+
   // function to assign value in the tile's DOM
   const addVal = (tileToAdd) => {
     tileToAdd.num = Math.ceil(Math.random() * 2) * 2; // returns 2 or 4 randomly
     tileToAdd.updateVal(document.querySelector("#" + tileToAdd.id)); // update val to DOM element's properties
     return 1;
   };
+
   // loop through all tiles
   for (let r = 0; r < allTiles.length; r++) {
     for (let c = 0; c < allTiles[r].length; c++) {
@@ -279,7 +287,7 @@ const slideTile = (dir) => {
   };
 
   // checks arrays before and after sliding, if its the same, return false so generateTiles() does not get invoked
-  const arrayDuplicate = (arrayOne, arrayTwo) => {
+  const checkDuplicate = (arrayOne, arrayTwo) => {
     let same = true;
     // loops through each tile value for comparison
     for (let r = 0; r < arrayOne.length; r++) {
@@ -334,7 +342,7 @@ const slideTile = (dir) => {
   }
 
   // false => change / true => don't change
-  if (arrayDuplicate(allTiles, combinedArr) === false) {
+  if (checkDuplicate(allTiles, combinedArr) === false) {
     // 4. convert numbers back to .num of each tile
     // maps combinedArr values into allTiles' tile classes
     for (let r = 0; r < allTiles.length; r++) {
