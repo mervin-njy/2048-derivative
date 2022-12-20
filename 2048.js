@@ -120,7 +120,10 @@ class Tile {
 // FUNCTIONS ---------------------------------------------------------------------------------------------------
 // ends the game due to tiles running out
 const gameOver = () => {
-  
+  // add modal box? window pop up (for now just windows alert)
+  alert(
+    "Game over, there are no more remaining tiles. Would you like to restart?"
+  );
 };
 
 // setBoard() {} logic triggered by window onload
@@ -196,10 +199,7 @@ const generateNew = (tileCount, emptyTiles) => {
       const currTile = allTiles[r][c];
       const tilesToFill = tileCount - currCount;
 
-      if (remainingTiles === 0) {
-        // trigger gameOver() if no tiles left, else we may proceed to generating tiles
-        gameOver();
-      } else if (currCount < tileCount) {
+      if (currCount < tileCount) {
         // if number of tiles to be filled not achieved, continue running
         if (currTile.num == 0) {
           // checks if the number of tiles left in the loop is = tiles to be filled, just assign value

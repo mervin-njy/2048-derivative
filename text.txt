@@ -1,0 +1,54 @@
+-------------------------------------------------------------------------------------------------------------------------------------------
+Remaining tasks:
+
+1. disallow generateNew() if array before = after
+    a. last part of slideTile(), before remapping values to DOM's properties, add a compareArray()
+
+2. Triggering game over 
+    a. compareGameTiles() if any can be combined
+    b. GameOver()
+    c. Restart()
+
+3. AddEventListener for changing colours
+    a. add other colour palettes
+    b. add HTML element (button/dropdown) to trigger event LISTENERS
+    c. change colPalette value to chosen colour
+
+4. Sliding animation for the tiles
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+Stretch goals:
+
+1. After 2048 is reached countTileValue(2048 or above) >= 1
+    a. randomly select one tile with value 2,4,8,16 or 32 to glow up
+        i. add glowing animation
+        ii. glow fades incrementally for x number of turns 
+        iii. if its over, the event does not occur
+        iv. if it is combined within the x turns, trigger b.
+    b. add one more outer ring with diff style (darker empty tiles)
+        i. gridCount=6 (instead of gridCount=4)
+        ii. tile.id = "t" + this.x+1, this.y+1, e.g. 00 becomes 11, 01 becomes 12
+        iii. anything within the exterior border will be removed after end of round
+    c. add popup describing challenge
+        i. randomly assign challenge e.g. 3x tile.val left after x amount of time 
+        ii. if succeed, game goes on and the tiles at the exterior border is removed
+        iii. if fail, gameOver()
+
+2. following the above condition, randomly assign another challenge
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+Issues to fix: 
+
+1. keypress (keyup) down and up arrow keys will also scroll browser
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+Describing process:
+1. variables
+
+2. class: Tile
+
+3. DOM elements
+
+4. eventListeners
+
+5. functions
