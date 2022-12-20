@@ -118,6 +118,11 @@ class Tile {
 
 ////////////////////--------------------------------------------------------------------------------------------
 // FUNCTIONS ---------------------------------------------------------------------------------------------------
+// ends the game due to tiles running out
+const gameOver = () => {
+  
+};
+
 // setBoard() {} logic triggered by window onload
 const setBoard = () => {
   //<div id="board"></div>
@@ -176,29 +181,36 @@ const countTileValue = (val) => {
 // generate new tiles at the end of each sliding step, only true if there are empty tiles
 const generateNew = (tileCount, emptyTiles) => {
   let currCount = 0;
-  let remainingTiles = totalTiles;
+  let remainingTiles = totalTiles; // counts remaining tiles in the loop
   // lower chance of added value if lesser empty tiles
   const randValue = emptyTiles / (totalTiles * 1.2);
   // function to assign value in the tile's DOM
   const addVal = (tileToAdd) => {
-    tileToAdd.num = Math.ceil(Math.random() * 2) * 2;
-    tileToAdd.updateVal(document.querySelector("#" + tileToAdd.id));
+    tileToAdd.num = Math.ceil(Math.random() * 2) * 2; // returns 2 or 4 randomly
+    tileToAdd.updateVal(document.querySelector("#" + tileToAdd.id)); // update val to DOM element's properties
     return 1;
   };
   // loop through all tiles
   for (let r = 0; r < allTiles.length; r++) {
     for (let c = 0; c < allTiles[r].length; c++) {
       const currTile = allTiles[r][c];
-      // if number of tiles to be filled not achieved, continue running
-      if (currCount < tileCount && currTile.num == 0) {
-        if (remainingTiles === tileCount - currCount) {
+      const tilesToFill = tileCount - currCount;
+
+      if (remainingTiles === 0) {
+        // trigger gameOver() if no tiles left, else we may proceed to generating tiles
+        gameOver();
+      } else if (currCount < tileCount) {
+        // if number of tiles to be filled not achieved, continue running
+        if (currTile.num == 0) {
           // checks if the number of tiles left in the loop is = tiles to be filled, just assign value
-          // this accounts for last few tiles to be filled
-          currCount += addVal(currTile);
-        } else {
-          // else check for random value before assigning value
-          if (Math.random() > randValue) {
+          if (remainingTiles === tilesToFill) {
+            // this accounts for last few tiles to be filled
             currCount += addVal(currTile);
+          } else if (remainingTiles > tilesToFill) {
+            // else check for random value before assigning value
+            if (Math.random() > randValue) {
+              currCount += addVal(currTile);
+            }
           }
         }
       } else {
