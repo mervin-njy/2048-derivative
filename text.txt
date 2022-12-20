@@ -5,20 +5,22 @@ Remaining tasks:
 // . disallow generateNew() if array before = after
 //    a. last part of slideTile(), before remapping values to DOM's properties, add a compareArray()
 
-1. change generateNew() tile selection criteria
-    a. currently goes through the loop and feed random value
-    b. change to get all empty tiles in an array
-    c. get random integer value as index for non-empty tile
+// . change generateNew() tile selection criteria
+//    a. currently goes through the loop and feed random value
+//    b. change to get all empty tiles in an array
+//    c. get random integer value as index for non-empty tile
 
 2. Triggering game over 
     a. compareGameTiles() if any can be combined
     b. GameOver()
     c. Restart()
 
-3. AddEventListener for changing colours
+3. dropdown.AddEventListener for changing colours
     a. add other colour palettes
     b. add HTML element (button/dropdown) to trigger event LISTENERS
     c. change colPalette value to chosen colour
+
+4. dropdown.AddEventListener for setting value (admin button) to show stretch goal
 
 4. Sliding animation for the tiles
 
@@ -48,6 +50,8 @@ Issues to fix:
 1. keypress (keyup) down and up arrow keys will also scroll browser
 https://www.w3schools.com/cssref/css3_pr_overflow-y.php
 
+2. font size becomes small after a long time, should be an issue with updateVal
+    a. tile 
 -------------------------------------------------------------------------------------------------------------------------------------------
 Describing process:
 1. variables
