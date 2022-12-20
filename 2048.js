@@ -58,7 +58,7 @@ const totalTiles = gridCount * gridCount;
 const gridSize = 100;
 const gridBorder = 4;
 const maxInitialTiles = 2;
-const numFontSize = gridSize * 0.4;
+const numFontSize = gridSize * 0.35;
 // access tiles as nested array of Tile classes
 const allTiles = [];
 
@@ -114,10 +114,9 @@ class Tile {
       tileDOM.style.backgroundColor = colPalette[colPalette.length - 3];
     }
 
+    tileDOM.style.fontSize = numFontSize + "px";
     // reduce font size if num is too large
-    if (this.num.toString().length <= 3) {
-      tileDOM.style.fontSize = numFontSize;
-    } else {
+    if (this.num.toString().length > 3) {
       tileDOM.style.fontSize =
         numFontSize - this.num.toString().length * 3 + "px";
     }
@@ -366,7 +365,7 @@ window.addEventListener(
   "keyup",
   (event) => {
     if (event.defaultPrevented) {
-      return; // Do nothing if event wasalready processed
+      return; // Do nothing if event was already processed
     }
 
     switch (event.key) {
@@ -393,14 +392,26 @@ window.addEventListener(
       case "Escape":
         // requestRestart()
         break;
-      // default:
-      //   return; // Quit when this doesn't handle the key event
+      default:
+        return; // Quit when this doesn't handle the key event
     }
-    // Cancel the default action to avoid being handled twice
+
     event.preventDefault();
   },
   true
 );
+
+// keyup has preventdefault to prevent scrollbar from moving, but when you keyup, keydown has to happen too, use this to prevent scrolling
+window.addEventListener("keydown", function (e) {
+  switch (e.key) {
+    case "ArrowLeft":
+    case "ArrowRight":
+    case "ArrowUp":
+    case "ArrowDown":
+      e.preventDefault();
+      break;
+  }
+});
 
 // Colour palette settings: settings dropdown menu
 // addEventListener

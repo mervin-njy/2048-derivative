@@ -47,11 +47,13 @@ Stretch goals:
 -------------------------------------------------------------------------------------------------------------------------------------------
 Issues to fix: 
 
-1. keypress (keyup) down and up arrow keys will also scroll browser
-https://www.w3schools.com/cssref/css3_pr_overflow-y.php
+// DONE
+// . keypress (keyup) down and up arrow keys will also scroll browser
+//      https://www.w3schools.com/cssref/css3_pr_overflow-y.php
+//      keydown needs to preventdefault() too, since keyup triggers keydown which on default scrolls the window
 
-2. font size becomes small after a long time, should be an issue with updateVal
-    a. tile 
+// DONE
+// . font size becomes small after a long time, should be an issue with updateVal
 -------------------------------------------------------------------------------------------------------------------------------------------
 Describing process:
 1. variables
