@@ -21,7 +21,22 @@ const bluePalette = [
   "#929ca7",
   "#283845",
 ];
-const colPalette = bluePalette;
+const greenPalette = [
+  "#E1F6E6",
+  "#BEDEC8",
+  "#A1C3B4",
+  "#82ABA1",
+  "#53779d",
+  "#63A091",
+  "#4D9587",
+  "#368A7C",
+  "#328071",
+  "#2E7565",
+  "#26604E",
+  "#80918C",
+  "#0C2C22",
+];
+const colPalette = greenPalette;
 // base variables to change grid/tile parameters
 const gridCount = 4;
 const totalTiles = gridCount * gridCount;
