@@ -36,7 +36,7 @@ const greenPalette = [
   "#80918C",
   "#0C2C22",
 ];
-const colPalette = greenPalette;
+const colPalette = bluePalette;
 // base variables to change grid/tile parameters
 const gridCount = 4;
 const totalTiles = gridCount * gridCount;
@@ -74,7 +74,7 @@ class Tile {
     document.querySelector("#board").append(newTile);
   }
 
-  // update tile's value in the DOM whenever it is changed
+  // update DOM element's parameters whenever it is changed
   updateVal(tileDOM) {
     // update score
     document.querySelector("#score").innerText = "" + score;
@@ -92,6 +92,7 @@ class Tile {
     // change tile colours
     if (this.num <= 2048) {
       // Math.log(this.num) / Math.log(2) - 0 is the opposite of math.pow()
+      // ind  = 0, 1, 2, 3, 4... 11... => val = math.pow(2, ind) = 1, 2, 4, 8, 16... 2048... (let's just take 1 as 0 with val <2)
       tileDOM.style.backgroundColor =
         colPalette[Math.log(this.num) / Math.log(2) - 1];
     } else {
@@ -154,15 +155,17 @@ const createTiles = () => {
   }
 
   // generate specific number of tiles to have starting values at random
-  generateNew(2, countEmpty());
+  generateNew(2, countTileValue(0));
 };
 
 // counts total number of empty tiles left on the board
-const countEmpty = () => {
+const countTileValue = (val) => {
+  // val = 1 refers to empty tiles, finding number of val = 2048 can trigger next event
   let count = 0;
+
   for (let r = 0; r < allTiles.length; r++) {
     for (let c = 0; c < allTiles[r].length; c++) {
-      if (allTiles[r][c].num === 0) {
+      if (allTiles[r][c].num === val) {
         count++;
       }
     }
@@ -257,7 +260,8 @@ const combineTiles = (dir) => {
       element.updateVal(document.querySelector(`#${element.id}`));
     });
   }
-  generateNew(1, countEmpty());
+  // generate new tile for next step, however we need a condition to check if the tile layout changed after sliding
+  generateNew(1, countTileValue(0));
 };
 
 // slideTile(dir) {} Logic
@@ -265,6 +269,7 @@ const slideTile = (dir) => {
   // for transposing array if dir === up and down
   const transposeArray = (nestedArray) => {
     const newArray = [];
+
     for (let row = 0; row < nestedArray.length; row++) {
       const innerArray = [];
       for (let col = 0; col < nestedArray[row].length; col++) {
