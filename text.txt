@@ -1,8 +1,9 @@
 -------------------------------------------------------------------------------------------------------------------------------------------
 Remaining tasks:
 
-1. disallow generateNew() if array before = after
-    a. last part of slideTile(), before remapping values to DOM's properties, add a compareArray()
+// DONE
+// 1. disallow generateNew() if array before = after
+//    a. last part of slideTile(), before remapping values to DOM's properties, add a compareArray()
 
 2. Triggering game over 
     a. compareGameTiles() if any can be combined

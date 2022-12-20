@@ -279,19 +279,20 @@ const slideTile = (dir) => {
   };
 
   // checks arrays before and after sliding, if its the same, return false so generateTiles() does not get invoked
-  const checkChanges = (arrayOne, arrayTwo) => {
+  const arrayDuplicate = (arrayOne, arrayTwo) => {
     let same = true;
+    // loops through each tile value for comparison
     for (let r = 0; r < arrayOne.length; r++) {
-      for (let c = 0; c < arrayOne[r]; c++) {
-        console.log(`Before: ${arrayOne[r][c]}`);
-        console.log(`After: ${arrayTwo[r][c]}`);
-        if (arrayOne[r][c] !== arrayTwo[r][c]) {
+      for (let c = 0; c < arrayOne[r].length; c++) {
+        if (arrayOne[r][c].num !== arrayTwo[r][c]) {
           same = false;
           break;
         }
       }
     }
-    return same; // true = array is the same throughout, false if not the same
+    return same;
+    // true = array is the same throughout, don't change
+    // false = not the same, change
   };
 
   // start with initial array to manipulate,
@@ -332,19 +333,20 @@ const slideTile = (dir) => {
     combinedArr = transposeArray(combinedArr);
   }
 
-  // 4. convert numbers back to .num of each tile
-  // maps combinedArr values into allTiles' tile classes
-  for (let r = 0; r < allTiles.length; r++) {
-    allTiles[r].map((element, index) => {
-      element.num = combinedArr[r][index];
-      element.updateVal(document.querySelector(`#${element.id}`));
-    });
+  // false => change / true => don't change
+  if (arrayDuplicate(allTiles, combinedArr) === false) {
+    // 4. convert numbers back to .num of each tile
+    // maps combinedArr values into allTiles' tile classes
+    for (let r = 0; r < allTiles.length; r++) {
+      allTiles[r].map((element, index) => {
+        element.num = combinedArr[r][index];
+        element.updateVal(document.querySelector(`#${element.id}`));
+      });
+    }
+
+    // generate new tile for next step, however we need a condition to check if the tile layout changed after sliding
+    generateNew(1, countTileValue(0));
   }
-  checkChanges(allTiles, combinedArr);
-  // generate new tile for next step, however we need a condition to check if the tile layout changed after sliding
-  // if (checkChanges(allTiles, combinedArr)) {
-  generateNew(1, countTileValue(0));
-  // }
 };
 
 ////////////////////--------------------------------------------------------------------------------------------
