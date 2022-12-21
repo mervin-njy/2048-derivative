@@ -67,19 +67,27 @@ Remaining tasks:
 //    a. countTileValue(0) === 0 then
 //    b. GameOver()
 //        i. added game = false to prevent arrow keys from triggering slide()
-    c. Restart()
+//    c. Restart()
+//    d. high score display
+        i. replace high score if score is higher
+
+3. other CSS stuff
+    a. flex score and high score
+    b. change colour of all elements based on colour palette
+    c. add variable for border, emptyTileBackground and discardTileBackground indices for easy access
+    d. score border
 
 3. dropdown.AddEventListener for changing colours
-    a. add other colour palettes
-    b. add HTML element (button/dropdown) to trigger event LISTENERS
+    a. add HTML element (button/dropdown) to trigger event LISTENERS
+    b. add other colour palettes
     c. change colPalette value to chosen colour
 
-4. dropdown.AddEventListener for setting value (admin button) to 
+4. button.AddEventlistener for instruction page
+
+5. dropdown.AddEventListener for setting value (admin button) to 
     a. random generate values to show gameOver
     b. generate Math.powe(2, i) to show all tile colours
     c. show stretch goal
-
-5. add high score
 
 6. Sliding animation for the tiles
 
@@ -96,7 +104,7 @@ Stretch goals:
         i. gridCount=6 (instead of gridCount=4)
         ii. tile.id = "t" + this.x+1, this.y+1, e.g. 00 becomes 11, 01 becomes 12
         iii. anything within the exterior border will be removed after end of round
-    c. add popup describing challenge
+    c. add aside describing challenge
         i. randomly assign challenge e.g. 3x tile.val left after x amount of time 
         ii. if succeed, game goes on and the tiles at the exterior border is removed
         iii. if fail, gameOver()
