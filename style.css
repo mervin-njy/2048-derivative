@@ -21,9 +21,9 @@ h1 {
 }
 
 #subtitle {
-  font-size: 40px;
+  font-size: 38px;
   font-weight: 100;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
 }
 
 h2 {
@@ -84,8 +84,8 @@ p {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: visible; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+  background-color: rgb(255, 255, 255); /* Fallback color */
+  background-color: rgba(255, 255, 255, 0.3); /* white w/ opacity */
 }
 
 /* modal Content */
@@ -131,9 +131,7 @@ p {
 }
 
 h1:hover,
-h2:hover,
-h3:hover,
-h4:hover {
+h2:hover {
   font-weight: bolder;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }

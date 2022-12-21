@@ -6,9 +6,9 @@
 const body = document.querySelector("body");
 const header = document.querySelector("header");
 const footer = document.querySelector("footer");
-let storeScore = 0;
-let score = document.querySelector("#score").innerText;
-let highScore = document.querySelector("#high-score").innerText;
+// let storeScore = 0;   // store best score to reassign best score value after removing DOM elements
+let score = document.querySelector("#score").innerHTML;
+let bestScore = document.querySelector("#best-score").innerHTML;
 let gameState = true;
 // colour palette picker - [2, 4, 8.... >2048, emptyTileCol, board/borderCol]
 const bluePalette = [
@@ -43,7 +43,7 @@ const greenPalette = [
 ];
 const purplePalette = [
   "#F7EDFF", // 2 + later font colors
-  "#E8DFF8", // 4
+  "#E8DFF8", // 4 -- CHANGE THIS
   "#DED0F5", // 8
   "#C8B8E2", // 16
   "#B0A0CB", // 32
@@ -56,7 +56,7 @@ const purplePalette = [
   "#978E9F", // 0
   "#332845", // border colour
 ];
-const colPalette = greenPalette;
+const colPalette = bluePalette;
 // base variables to change grid/tile parameters
 const gridCount = 4;
 const totalTiles = gridCount * gridCount;
@@ -65,7 +65,7 @@ const gridBorder = 4;
 const maxInitialTiles = 2;
 const numFontSize = gridSize * 0.35;
 // access tiles as nested array of Tile classes
-const allTiles = [];
+let allTiles = [];
 
 ////////////////////--------------------------------------------------------------------------------------------
 // CLASSES -----------------------------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ class Tile {
   // update DOM element's parameters whenever it is changed
   updateVal(tileDOM) {
     // update score
-    document.querySelector("#score").innerText = "" + score;
+    document.querySelector("#score").innerHTML = score;
     // update number display and DOM class
     if (this.num >= 2) {
       tileDOM.innerText = this.num;
@@ -177,8 +177,10 @@ const gameOver = () => {
     // remove all existing game elements
     document.querySelector("#board").remove();
     modalBox.remove();
+    // reset allTiles array to clean slate
+    allTiles = [];
     // reset score and replace high score if it is higher than it
-    if (Number(score) > Number(highScore)) storeScore = score;
+    if (Number(score) > Number(bestScore)) bestScore = score;
     score = 0;
     // reset game state and reset board for new game
     gameState = true;
@@ -193,7 +195,7 @@ const setBoard = () => {
   body.style.color = colPalette[0];
   header.style.width = gridSize * gridCount + "px";
   footer.style.width = gridSize * gridCount + "px";
-  document.querySelector("#high-score").innertext = "" + storeScore;
+  document.querySelector("#best-score").innerHTML = bestScore;
   //<div id="board"></div>
   const newBoard = document.createElement("div");
   newBoard.id = "board";
@@ -311,6 +313,7 @@ const combineTiles = (row) => {
 // slide(dir) {} Logic
 const slide = (dir) => {
   console.log("Sliding " + dir);
+  console.log(allTiles);
   // for transposing array if dir === up and down
   const transposeArray = (nestedArray) => {
     const newArray = [];
@@ -353,10 +356,10 @@ const slide = (dir) => {
 
     // loops through each tile to compare with adjacent tile's value
     for (let r = 0; r < arr.length; r++) {
-      console.log(`${dir} row ${r} values:`);
+      // console.log(`${dir} row ${r} values:`);
       // compare for all rows
       for (let c = 0; c < arr[r].length - 1; c++) {
-        console.log(`${arr[r][c].num}`);
+        // console.log(`${arr[r][c].num}`);
         // last column not required to compare (index +1 will exceed range)
         if (arr[r][c].num === arr[r][c + 1].num) {
           same = true; // change to true if any adjacent tile can be combined

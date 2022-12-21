@@ -69,7 +69,7 @@ Remaining tasks:
 //        i. added game = false to prevent arrow keys from triggering slide()
 //    c. Restart()
 //    d. high score display
-        i. replace high score if score is higher
+//        i. replace high score if score is higher
 
 3. other CSS stuff
     a. flex score and high score
