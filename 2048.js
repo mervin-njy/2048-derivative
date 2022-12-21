@@ -3,9 +3,13 @@
 ////////////////////--------------------------------------------------------------------------------------------
 // VARIABLES ---------------------------------------------------------------------------------------------------
 // base variables to access DOM
+const body = document.querySelector("body");
 const header = document.querySelector("header");
+const footer = document.querySelector("footer");
+let storeScore = 0;
 let score = document.querySelector("#score").innerText;
-let game = true;
+let highScore = document.querySelector("#high-score").innerText;
+let gameState = true;
 // colour palette picker - [2, 4, 8.... >2048, emptyTileCol, board/borderCol]
 const bluePalette = [
   "#eef6ff", // 2 + later font colors
@@ -134,24 +138,62 @@ class Tile {
 ////////////////////--------------------------------------------------------------------------------------------
 // FUNCTIONS ---------------------------------------------------------------------------------------------------
 // ends the game due to tiles running out
+const restartGame = () => {};
+
 const gameOver = () => {
-  game = false; // stops eventlistener from ocurring when you slide tiles
+  gameState = false; // stops eventlistener from ocurring when you slide tiles
   console.log("Game over. Would you like to restart?");
 
-  // toggle show for popup window
-  const popUp = document.createElement("div");
-  popUp.classList.add("popup");
+  const mainColour = colPalette[Math.floor(colPalette.length * 0.8)];
+  const accentColour = colPalette[0];
+  // create HTML DOM: Modal & modal content
+  // <div class="modal">
+  const modalBox = document.createElement("div");
+  modalBox.classList.add("modal");
+  //  <div class="modal-content">
+  const modalDisplay = document.createElement("div");
+  modalDisplay.classList.add("modal-content");
+  modalDisplay.style.width = gridSize * gridCount * 1.2 + "px";
+  modalDisplay.style.backgroundColor = mainColour;
+  modalDisplay.style.color = accentColour;
+  //      <h3>gameover text</h3>
+  const modalText = document.createElement("h3");
+  modalText.innerText = "Game over. Would you like to restart?";
+  modalDisplay.append(modalText);
 
-  const popuptext = document.createElement("h2");
-  popuptext.innerText = "Game over. Would you like to restart?";
-  popUp.append(popuptext);
-  document.querySelector("#board").prepend(popUp);
+  //      <button class="restart-button">restart</button>
+  const restartButton = document.createElement("button");
+  restartButton.classList.add("restart-button");
+  restartButton.innerText = "YES PLEASE";
+  restartButton.style.backgroundColor = accentColour;
+  restartButton.style.color = mainColour;
+  modalText.after(restartButton);
+  // </div></div>
+  modalBox.append(modalDisplay);
+  header.after(modalBox);
 
-  popUp.classList.toggle("show");
+  // restart game once button is clicked
+  restartButton.addEventListener("click", () => {
+    // remove all existing game elements
+    document.querySelector("#board").remove();
+    modalBox.remove();
+    // reset score and replace high score if it is higher than it
+    if (Number(score) > Number(highScore)) storeScore = score;
+    score = 0;
+    // reset game state and reset board for new game
+    gameState = true;
+    setBoard();
+  });
 };
 
 // setBoard() {} logic triggered by window onload
 const setBoard = () => {
+  // set DOM element properties
+  body.style.backgroundColor = colPalette[colPalette.length - 3];
+  body.style.color = colPalette[0];
+  header.style.width = gridSize * gridCount + "px";
+  footer.style.width = gridSize * gridCount + "px";
+  document.querySelector("#high-score").innertext = "" + storeScore;
   //<div id="board"></div>
   const newBoard = document.createElement("div");
   newBoard.id = "board";
@@ -411,7 +453,7 @@ window.addEventListener(
     if (e.defaultPrevented) {
       return; // Do nothing if event was already processed
     }
-    if (game === true) {
+    if (gameState === true) {
       switch (e.key) {
         case "ArrowDown":
           // slide(down)

@@ -79,8 +79,9 @@ Remaining tasks:
     b. generate Math.powe(2, i) to show all tile colours
     c. show stretch goal
 
+5. add high score
 
-4. Sliding animation for the tiles
+6. Sliding animation for the tiles
 
 -------------------------------------------------------------------------------------------------------------------------------------------
 Stretch goals:
