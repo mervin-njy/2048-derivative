@@ -56,7 +56,10 @@ const purplePalette = [
   "#978E9F", // 0
   "#332845", // border colour
 ];
-const colPalette = bluePalette;
+const colPalette = purplePalette;
+const maxValColIndex = colPalette[colPalette.length - 3];
+const emptyTileColIndex = colPalette[colPalette.length - 2];
+const borderColIndex = colPalette[colPalette.length - 1];
 // base variables to change grid/tile parameters
 const gridCount = 4;
 const totalTiles = gridCount * gridCount;
@@ -75,7 +78,8 @@ class Tile {
     (this.x = colInd),
       (this.y = rowInd),
       (this.num = num),
-      (this.id = `t${this.x}${this.y}`);
+      (this.id = `t${this.x}${this.y}`),
+      (this.DOM = null);
   }
 
   // construct DOM element with assigned value
@@ -90,56 +94,77 @@ class Tile {
 
     // add classes for .tile, and tile+num
     newTile.classList.add("tile");
-    this.updateVal(newTile);
+    this.DOM = newTile;
+    this.updateDOM();
     document.querySelector("#board").append(newTile);
   }
 
-  // update DOM element's parameters whenever it is changed
-  updateVal(tileDOM) {
-    // update score
-    document.querySelector("#score").innerHTML = score;
-    // update number display and DOM class
-    if (this.num >= 2) {
-      tileDOM.innerText = this.num;
-      tileDOM.classList.add("t" + this.num);
-    } else {
-      tileDOM.innerText = ""; // don't display if number is 1 or math.pow(2,1)
-      tileDOM.style.backgroundColor = colPalette[colPalette.length - 2];
-    }
-
+  updateColour() {
     // fixed border colour
-    tileDOM.style.borderColor = colPalette[colPalette.length - 1];
+    this.DOM.style.borderColor = borderColIndex;
     // change tile colours
     if (this.num <= 2048) {
       // Math.log(this.num) / Math.log(2) - 0 is the opposite of math.pow()
       // ind  = 0, 1, 2, 3, 4... 11... => val = math.pow(2, ind) = 1, 2, 4, 8, 16... 2048... (let's just take 1 as 0 with val <2)
-      tileDOM.style.backgroundColor =
+      this.DOM.style.backgroundColor =
         colPalette[Math.log(this.num) / Math.log(2) - 1];
     } else {
-      tileDOM.style.backgroundColor = colPalette[colPalette.length - 3];
-    }
-
-    tileDOM.style.fontSize = numFontSize + "px";
-    // reduce font size if num is too large
-    if (this.num.toString().length > 3) {
-      tileDOM.style.fontSize =
-        numFontSize - this.num.toString().length * 3 + "px";
+      this.DOM.style.backgroundColor = maxValColIndex;
     }
 
     // after tile 8, the font colour changes to white
     if (this.num <= Math.pow(2, 3)) {
-      tileDOM.style.color = colPalette[colPalette.length - 3];
+      this.DOM.style.color = maxValColIndex;
     } else {
-      tileDOM.style.color = colPalette[0];
+      this.DOM.style.color = colPalette[0];
     }
+  }
+
+  // update DOM element's parameters whenever it is changed
+  updateNum() {
+    // update score
+    document.querySelector("#score").innerHTML = score;
+    // update number display and DOM class
+    if (this.num >= 2) {
+      this.DOM.innerText = this.num;
+      this.DOM.classList.add("t" + this.num);
+    } else {
+      this.DOM.innerText = ""; // don't display if number is 1 or math.pow(2,1)
+      this.DOM.style.backgroundColor = emptyTileColIndex;
+    }
+
+    this.DOM.style.fontSize = numFontSize + "px";
+    // reduce font size if num is too large
+    if (this.num.toString().length > 3) {
+      this.DOM.style.fontSize =
+        numFontSize - this.num.toString().length * 3 + "px";
+    }
+  }
+
+  updateDOM() {
+    this.updateColour();
+    this.updateNum();
   }
 }
 
 ////////////////////--------------------------------------------------------------------------------------------
 // FUNCTIONS ---------------------------------------------------------------------------------------------------
-// ends the game due to tiles running out
-const restartGame = () => {};
+// restarts game either by clicking restart at gameOver or restart button in menu
+const restartGame = () => {
+  // remove all existing game elements
+  document.querySelector("#board").remove();
+  document.querySelector(".modal").remove();
+  // reset allTiles array to clean slate
+  allTiles = [];
+  // reset score and replace high score if it is higher than it
+  if (Number(score) > Number(bestScore)) bestScore = score;
+  score = 0;
+  // reset game state and reset board for new game
+  gameState = true;
+  setBoard();
+};
 
+// ends the game due to tiles running out
 const gameOver = () => {
   gameState = false; // stops eventlistener from ocurring when you slide tiles
   console.log("Game over. Would you like to restart?");
@@ -174,24 +199,14 @@ const gameOver = () => {
 
   // restart game once button is clicked
   restartButton.addEventListener("click", () => {
-    // remove all existing game elements
-    document.querySelector("#board").remove();
-    modalBox.remove();
-    // reset allTiles array to clean slate
-    allTiles = [];
-    // reset score and replace high score if it is higher than it
-    if (Number(score) > Number(bestScore)) bestScore = score;
-    score = 0;
-    // reset game state and reset board for new game
-    gameState = true;
-    setBoard();
+    restartGame();
   });
 };
 
 // setBoard() {} logic triggered by window onload
 const setBoard = () => {
   // set DOM element properties
-  body.style.backgroundColor = colPalette[colPalette.length - 3];
+  body.style.backgroundColor = maxValColIndex;
   body.style.color = colPalette[0];
   header.style.width = gridSize * gridCount + "px";
   footer.style.width = gridSize * gridCount + "px";
@@ -202,9 +217,9 @@ const setBoard = () => {
   newBoard.style.width = gridSize * gridCount + "px";
   newBoard.style.height = gridSize * gridCount + "px";
   newBoard.style.border = gridBorder + "px solid";
-  newBoard.style.backgroundColor = colPalette[colPalette.length - 1];
+  newBoard.style.backgroundColor = maxValColIndex;
   newBoard.style.borderRadius = gridBorder * 2 + "px";
-  newBoard.style.borderColor = colPalette[colPalette.length - 1];
+  newBoard.style.borderColor = maxValColIndex;
 
   header.after(newBoard);
   // construct tiles after board is set up
@@ -272,7 +287,7 @@ const generateNew = (tileCount, emptyTiles) => {
   // function to assign value in the tile's DOM
   const addVal = (tileToAdd) => {
     tileToAdd.num = Math.ceil(Math.random() * 2) * 2; // returns 2 or 4 randomly
-    tileToAdd.updateVal(document.querySelector("#" + tileToAdd.id)); // update values to DOM element's properties
+    tileToAdd.updateDOM(); // update values to DOM element's properties
     return 1;
   };
 
@@ -418,7 +433,7 @@ const slide = (dir) => {
     for (let r = 0; r < allTiles.length; r++) {
       allTiles[r].map((element, index) => {
         element.num = combinedArr[r][index];
-        element.updateVal(document.querySelector(`#${element.id}`));
+        element.updateDOM();
       });
     }
 

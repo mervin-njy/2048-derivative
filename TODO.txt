@@ -25,6 +25,7 @@ javascript: --------------------------------------------------------------------
     b. createTiles() => class Tile (this.id, this.num)
         i. Tile.createDOM() => initiates tile styling properties on DOM element
         ii. Tile.updateDOM() => updates style properties based on value changes
+            - Tile.updateNum() for number value and font, Tile.updateColour() for colour changes (this is for colourPalette button)
 
 2. reusable functions for DOM manipulation
     a. countTileValue(val) => counts number of tiles with specific value (useful for multiple scenarios)
@@ -72,9 +73,9 @@ Remaining tasks:
 //        i. replace high score if score is higher
 
 3. other CSS stuff
-    a. flex score and high score
-    b. change colour of all elements based on colour palette
-    c. add variable for border, emptyTileBackground and discardTileBackground indices for easy access
+//    a. flex score and high score
+//    b. change colour of all elements based on colour palette
+//    c. add variable for border, emptyTileBackground and discardTileBackground indices for easy access
     d. score border
 
 3. dropdown.AddEventListener for changing colours
