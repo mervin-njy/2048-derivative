@@ -134,37 +134,35 @@ class Tile {
 // FUNCTIONS ---------------------------------------------------------------------------------------------------
 // ends the game due to tiles running out
 const gameOver = () => {
-  console.log(
-    "Game over, there are no more remaining tiles. Would you like to restart?"
-  );
+  console.log("Game over. Would you like to restart?");
 
   // toggle show for popup window
   const popUp = document.createElement("div");
   popUp.classList.add("popup");
 
   const popuptext = document.createElement("h2");
-  popuptext.innerText =
-    "Game over, there are no more remaining tiles. Would you like to restart?";
+  popuptext.innerText = "Game over. Would you like to restart?";
   popUp.append(popuptext);
   document.querySelector("#board").append(popUp);
 
   popUp.classList.toggle("show");
 
   // prevent further trigger with keypress
-  window.removeEventListener("keyup", function (e) {
-    switch (e.key) {
-      case "ArrowLeft":
-        slide("left");
-      case "ArrowRight":
-        slide("right");
-      case "ArrowUp":
-        slide("up");
-      case "ArrowDown":
-        slide("down");
-        // e.preventDefault();
-        break;
-    }
-  });
+  window.removeEventListener(
+    "keyup",
+    function (e) {
+      switch (e.key) {
+        case "ArrowLeft":
+        case "ArrowRight":
+        case "ArrowUp":
+        case "ArrowDown":
+          slide;
+          // e.preventDefault();
+          break;
+      }
+    },
+    false
+  );
 };
 
 // setBoard() {} logic triggered by window onload
@@ -229,12 +227,6 @@ const countTileValue = (val) => {
 
 // generate new tiles at the end of each sliding step, only true if there are empty tiles
 const generateNew = (tileCount, emptyTiles) => {
-  // variables for assessing board's tiles condition
-  //   let currCount = 0;
-  //   let remainingTiles = totalTiles; // counts remaining tiles in the loop
-  // lower chance of added value if lesser empty tiles
-  //   const randValue = emptyTiles / (totalTiles * 1.2);
-
   // function to get array of emptyTiles for randomized tile allocation
   const emptyTileArray = (nestedArr) => {
     const arr = [];
@@ -298,6 +290,7 @@ const slide = (dir) => {
 
     for (let row = 0; row < nestedArray.length; row++) {
       const innerArray = [];
+
       for (let col = 0; col < nestedArray[row].length; col++) {
         innerArray.push(nestedArray[col][row]);
         if (innerArray.length === nestedArray[row].length) {
@@ -373,10 +366,10 @@ const slide = (dir) => {
 
     // 3. combine function
     if (dir === "left" || dir == "up") {
-      // 3a. combine values and update as new row
+      // a. combine values and update as new row
       currRow = combineTiles(currRow);
     } else if (dir === "right" || "down") {
-      // 3b. manipulate row if slide dir is right
+      // b. manipulate row if slide dir is right
       currRow.reverse();
       currRow = combineTiles(currRow);
       currRow.reverse();
@@ -388,7 +381,7 @@ const slide = (dir) => {
     combinedArr = transposeArray(combinedArr);
   }
 
-  // false => change / true => don't change
+  // checks if after combination, array is the same: false => change / true => don't change
   if (checkDuplicate(allTiles, combinedArr) === false) {
     // 4. convert numbers back to .num of each tile
     // maps combinedArr values into allTiles' tile classes
@@ -403,13 +396,15 @@ const slide = (dir) => {
     generateNew(1, countTileValue(0));
   }
 
-  let continueGame = checkAdjacency("horizontal");
-  if (continueGame) continueGame = checkAdjacency("vertical");
-
-  if (countTileValue(0) === 0 && continueGame === false) {
-    gameOver();
-  } else {
-    console.log("game continues");
+  // after generating new tile, check if the new board can still rearrange tiles
+  // 1. check if board has empty tiles
+  if (countTileValue(0) === 0) {
+    // 2. if board has no more space, check if adjacent tiles can be combined (in both directions) => either is false = gameOver()
+    if (checkAdjacency("horizontal") || checkAdjacency("vertical")) {
+      console.log("game continues");
+    } else {
+      gameOver();
+    }
   }
 };
 

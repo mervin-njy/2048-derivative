@@ -64,8 +64,8 @@ Remaining tasks:
 //    c. get random integer value as index for non-empty tile
 
 2. Triggering game over 
-    a. countTileValue(0) === 0 then
-    b. GameOver()
+//    a. countTileValue(0) === 0 then
+//    b. GameOver()
     c. Restart()
 
 3. dropdown.AddEventListener for changing colours
@@ -73,7 +73,11 @@ Remaining tasks:
     b. add HTML element (button/dropdown) to trigger event LISTENERS
     c. change colPalette value to chosen colour
 
-4. dropdown.AddEventListener for setting value (admin button) to show stretch goal
+4. dropdown.AddEventListener for setting value (admin button) to 
+    a. random generate values to show gameOver
+    b. generate Math.powe(2, i) to show all tile colours
+    c. show stretch goal
+
 
 4. Sliding animation for the tiles
 
