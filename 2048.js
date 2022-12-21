@@ -61,9 +61,10 @@ const maxValColIndex = colPalette[colPalette.length - 3];
 const emptyTileColIndex = colPalette[colPalette.length - 2];
 const borderColIndex = colPalette[colPalette.length - 1];
 // base variables to change grid/tile parameters
-const gridCount = 4;
-const totalTiles = gridCount * gridCount;
-const gridSize = 100;
+let gridCount = 4; // to be changed if resetBoard() is triggered later on
+const newGridCount = 6;
+let gridSize = 100; // to be changed if resetBoard() triggered later on
+const newGridSize = (gridSize / newGridCount) * gridCount;
 const gridBorder = 4;
 const maxInitialTiles = 2;
 const numFontSize = gridSize * 0.35;
@@ -73,6 +74,40 @@ let allTiles = [];
 ////////////////////--------------------------------------------------------------------------------------------
 // CLASSES -----------------------------------------------------------------------------------------------------
 // class Tile {} to store tile id and values, combine functions
+class Board {
+  // default tiles = 4 since its a 4x4 grid. Trigger event becomes 8
+  constructor() {
+    this.DOM = null;
+  }
+
+  constructDOM() {
+    body.style.backgroundColor = maxValColIndex;
+    body.style.color = colPalette[0];
+    header.style.width = gridSize * gridCount + "px";
+    footer.style.width = gridSize * gridCount + "px";
+    document.querySelector("#best-score").innerHTML = bestScore;
+    //<div id="board"></div>
+    const newBoard = document.createElement("div");
+    newBoard.id = "board";
+    newBoard.style.width = gridSize * gridCount + "px";
+    newBoard.style.height = gridSize * gridCount + "px";
+    newBoard.style.border = gridBorder + "px solid";
+    newBoard.style.backgroundColor = maxValColIndex;
+    newBoard.style.borderRadius = gridBorder * 2 + "px";
+    newBoard.style.borderColor = maxValColIndex;
+
+    this.DOM = newBoard;
+    header.after(newBoard);
+  }
+
+  updateColour() {
+    body.style.backgroundColor = maxValColIndex;
+    body.style.color = colPalette[0];
+    this.DOM.style.backgroundColor = maxValColIndex;
+    this.DOM.style.borderColor = maxValColIndex;
+  }
+}
+
 class Tile {
   constructor(colInd, rowInd, num = 0) {
     (this.x = colInd),
@@ -97,6 +132,11 @@ class Tile {
     this.DOM = newTile;
     this.updateDOM();
     document.querySelector("#board").append(newTile);
+  }
+
+  updateDOM() {
+    this.updateColour();
+    this.updateNum();
   }
 
   updateColour() {
@@ -139,11 +179,6 @@ class Tile {
       this.DOM.style.fontSize =
         numFontSize - this.num.toString().length * 3 + "px";
     }
-  }
-
-  updateDOM() {
-    this.updateColour();
-    this.updateNum();
   }
 }
 
@@ -203,25 +238,17 @@ const gameOver = () => {
   });
 };
 
+const resetBoard = () => {
+  gridSize = newGridSize;
+  gridCount = newGridCount;
+  setBoard();
+};
+
 // setBoard() {} logic triggered by window onload
 const setBoard = () => {
-  // set DOM element properties
-  body.style.backgroundColor = maxValColIndex;
-  body.style.color = colPalette[0];
-  header.style.width = gridSize * gridCount + "px";
-  footer.style.width = gridSize * gridCount + "px";
-  document.querySelector("#best-score").innerHTML = bestScore;
-  //<div id="board"></div>
-  const newBoard = document.createElement("div");
-  newBoard.id = "board";
-  newBoard.style.width = gridSize * gridCount + "px";
-  newBoard.style.height = gridSize * gridCount + "px";
-  newBoard.style.border = gridBorder + "px solid";
-  newBoard.style.backgroundColor = maxValColIndex;
-  newBoard.style.borderRadius = gridBorder * 2 + "px";
-  newBoard.style.borderColor = maxValColIndex;
-
-  header.after(newBoard);
+  // constructs new board element with properties based on grid count, default = 4
+  const newBoard = new Board();
+  newBoard.constructDOM();
   // construct tiles after board is set up
   createTiles();
 };
@@ -231,7 +258,7 @@ const createTiles = () => {
   // construct array for each row
   let tileRow = [];
   // randomly generate starting tiles with empty values
-  for (let i = 0; i < totalTiles; i++) {
+  for (let i = 0; i < gridCount * gridCount; i++) {
     // construct new tile class to store index and value (col (x), row (y), num)
     const newTile = new Tile(
       i % gridCount,
@@ -251,7 +278,7 @@ const createTiles = () => {
   }
 
   // generate specific number of tiles to have starting values at random
-  generateNew(2, countTileValue(0));
+  generateNew(maxInitialTiles, countTileValue(0));
 };
 
 // counts total number of empty tiles left on the board
@@ -328,7 +355,7 @@ const combineTiles = (row) => {
 // slide(dir) {} Logic
 const slide = (dir) => {
   console.log("Sliding " + dir);
-  console.log(allTiles);
+  // console.log(allTiles);
   // for transposing array if dir === up and down
   const transposeArray = (nestedArray) => {
     const newArray = [];
@@ -371,10 +398,8 @@ const slide = (dir) => {
 
     // loops through each tile to compare with adjacent tile's value
     for (let r = 0; r < arr.length; r++) {
-      // console.log(`${dir} row ${r} values:`);
       // compare for all rows
       for (let c = 0; c < arr[r].length - 1; c++) {
-        // console.log(`${arr[r][c].num}`);
         // last column not required to compare (index +1 will exceed range)
         if (arr[r][c].num === arr[r][c + 1].num) {
           same = true; // change to true if any adjacent tile can be combined
@@ -382,7 +407,11 @@ const slide = (dir) => {
         }
       }
     }
-    console.log(`${dir} direction can still slide: ${same}`);
+    if (same) {
+      console.log(`${dir} direction can still slide.`);
+    } else {
+      console.log(`${dir} direction cannot move anymore.`);
+    }
     return same;
     // true = tiles still can combine, game is not over
     // false = tiles cannot combine anymore, gameOver
