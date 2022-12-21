@@ -4,6 +4,7 @@ body {
   letter-spacing: 1px;
 }
 
+/* header to display title and score */
 header {
   margin: 20px;
 }
@@ -18,6 +19,7 @@ h2 {
   font-weight: 300;
 }
 
+/* main div to contain game elements */
 #board {
   display: flex;
   flex-wrap: wrap;
@@ -26,14 +28,14 @@ h2 {
 }
 
 .tile {
-  /* alignment to the middle of tile */
-  display: flex;
+  display: flex; /* alignment to the middle of tile */
   justify-content: center;
   align-items: center;
   font-weight: 600;
   color: #17293d;
 }
 
+/* footer to contain instructions */
 footer {
   width: 500px;
   margin: 0 auto;
@@ -50,4 +52,65 @@ p {
   letter-spacing: 2px;
   font-size: 12px;
   line-height: 20px;
+}
+
+/* Popup container for gameOver()  */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1; /* makes it sit on top of the display screen */
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

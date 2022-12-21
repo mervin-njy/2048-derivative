@@ -134,10 +134,29 @@ class Tile {
 // FUNCTIONS ---------------------------------------------------------------------------------------------------
 // ends the game due to tiles running out
 const gameOver = () => {
-  // add modal box? window pop up (for now just windows alert)
-  alert(
-    "Game over, there are no more remaining tiles. Would you like to restart?"
-  );
+  // toggle show for popup window
+  const popUp = document.createElement("div");
+  popUp.classList.add("popup");
+
+  const popuptext = document.createElement("h2");
+  popuptext.innerText =
+    "Game over, there are no more remaining tiles. Would you like to restart?";
+  popUp.append(popuptext);
+  document.querySelector("#board").append(popUp);
+
+  popUp.classList.toggle("show");
+
+  // prevent further trigger with keypress
+  window.addEventListener("keyup", function (e) {
+    switch (e.key) {
+      case "ArrowLeft":
+      case "ArrowRight":
+      case "ArrowUp":
+      case "ArrowDown":
+        e.preventDefault();
+        break;
+    }
+  });
 };
 
 // setBoard() {} logic triggered by window onload
@@ -349,6 +368,8 @@ const slide = (dir) => {
     // generate new tile for next step, however we need a condition to check if the tile layout changed after sliding
     generateNew(1, countTileValue(0));
   }
+
+  if (countTileValue(0) === 0) gameOver();
 };
 
 ////////////////////--------------------------------------------------------------------------------------------
@@ -365,12 +386,12 @@ window.addEventListener("load", (event) => {
 // eventListener: keypress for sliding tiles
 window.addEventListener(
   "keyup",
-  (event) => {
-    if (event.defaultPrevented) {
+  (e) => {
+    if (e.defaultPrevented) {
       return; // Do nothing if event was already processed
     }
 
-    switch (event.key) {
+    switch (e.key) {
       case "ArrowDown":
         // slide(down)
         slide("down");
@@ -398,7 +419,7 @@ window.addEventListener(
         return; // Quit when this doesn't handle the key event
     }
 
-    event.preventDefault();
+    e.preventDefault();
   },
   true
 );

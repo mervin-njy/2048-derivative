@@ -64,7 +64,7 @@ Remaining tasks:
 //    c. get random integer value as index for non-empty tile
 
 2. Triggering game over 
-    a. compareGameTiles() if any can be combined
+    a. countTileValue(0) === 0 then
     b. GameOver()
     c. Restart()
 
