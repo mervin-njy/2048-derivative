@@ -107,6 +107,8 @@ Issues to fix:
 
 // DONE
 // . font size becomes small after a long time, should be an issue with updateVal
+
+// 1. gameOver() currently for emptyTile count = 0, but if slide(other dir) still works, it shouldn't be triggered
 -------------------------------------------------------------------------------------------------------------------------------------------
 Describing process:
 1. variables

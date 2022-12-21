@@ -134,6 +134,10 @@ class Tile {
 // FUNCTIONS ---------------------------------------------------------------------------------------------------
 // ends the game due to tiles running out
 const gameOver = () => {
+  console.log(
+    "Game over, there are no more remaining tiles. Would you like to restart?"
+  );
+
   // toggle show for popup window
   const popUp = document.createElement("div");
   popUp.classList.add("popup");
@@ -147,13 +151,17 @@ const gameOver = () => {
   popUp.classList.toggle("show");
 
   // prevent further trigger with keypress
-  window.addEventListener("keyup", function (e) {
+  window.removeEventListener("keyup", function (e) {
     switch (e.key) {
       case "ArrowLeft":
+        slide("left");
       case "ArrowRight":
+        slide("right");
       case "ArrowUp":
+        slide("up");
       case "ArrowDown":
-        e.preventDefault();
+        slide("down");
+        // e.preventDefault();
         break;
     }
   });
@@ -283,6 +291,7 @@ const combineTiles = (row) => {
 
 // slide(dir) {} Logic
 const slide = (dir) => {
+  console.log("Sliding " + dir);
   // for transposing array if dir === up and down
   const transposeArray = (nestedArray) => {
     const newArray = [];
@@ -314,6 +323,31 @@ const slide = (dir) => {
     return same;
     // true = array is the same throughout, don't change
     // false = not the same, change
+  };
+
+  const checkAdjacency = (dir) => {
+    let same = false;
+    let arr = allTiles;
+    // transpose arr to check for vertical adjacency
+    if (dir === "vertical") arr = transposeArray(arr);
+
+    // loops through each tile to compare with adjacent tile's value
+    for (let r = 0; r < arr.length; r++) {
+      console.log(`${dir} row ${r} values:`);
+      // compare for all rows
+      for (let c = 0; c < arr[r].length - 1; c++) {
+        console.log(`${arr[r][c].num}`);
+        // last column not required to compare (index +1 will exceed range)
+        if (arr[r][c].num === arr[r][c + 1].num) {
+          same = true; // change to true if any adjacent tile can be combined
+          break;
+        }
+      }
+    }
+    console.log(`${dir} direction can still slide: ${same}`);
+    return same;
+    // true = tiles still can combine, game is not over
+    // false = tiles cannot combine anymore, gameOver
   };
 
   // start with initial array to manipulate,
@@ -369,7 +403,14 @@ const slide = (dir) => {
     generateNew(1, countTileValue(0));
   }
 
-  if (countTileValue(0) === 0) gameOver();
+  let continueGame = checkAdjacency("horizontal");
+  if (continueGame) continueGame = checkAdjacency("vertical");
+
+  if (countTileValue(0) === 0 && continueGame === false) {
+    gameOver();
+  } else {
+    console.log("game continues");
+  }
 };
 
 ////////////////////--------------------------------------------------------------------------------------------
@@ -395,22 +436,18 @@ window.addEventListener(
       case "ArrowDown":
         // slide(down)
         slide("down");
-        console.log("sliding down");
         break;
       case "ArrowUp":
         // slide(up)
         slide("up");
-        console.log("sliding up");
         break;
       case "ArrowLeft":
         // slide(left)
         slide("left");
-        console.log("sliding left");
         break;
       case "ArrowRight":
         // slide(right)
         slide("right");
-        console.log("sliding right");
         break;
       case "Escape":
         // requestRestart()
