@@ -5,6 +5,7 @@
 // base variables to access DOM
 const header = document.querySelector("header");
 let score = document.querySelector("#score").innerText;
+let game = true;
 // colour palette picker - [2, 4, 8.... >2048, emptyTileCol, board/borderCol]
 const bluePalette = [
   "#eef6ff", // 2 + later font colors
@@ -134,6 +135,7 @@ class Tile {
 // FUNCTIONS ---------------------------------------------------------------------------------------------------
 // ends the game due to tiles running out
 const gameOver = () => {
+  game = false; // stops eventlistener from ocurring when you slide tiles
   console.log("Game over. Would you like to restart?");
 
   // toggle show for popup window
@@ -143,26 +145,9 @@ const gameOver = () => {
   const popuptext = document.createElement("h2");
   popuptext.innerText = "Game over. Would you like to restart?";
   popUp.append(popuptext);
-  document.querySelector("#board").append(popUp);
+  document.querySelector("#board").prepend(popUp);
 
   popUp.classList.toggle("show");
-
-  // prevent further trigger with keypress
-  window.removeEventListener(
-    "keyup",
-    function (e) {
-      switch (e.key) {
-        case "ArrowLeft":
-        case "ArrowRight":
-        case "ArrowUp":
-        case "ArrowDown":
-          slide;
-          // e.preventDefault();
-          break;
-      }
-    },
-    false
-  );
 };
 
 // setBoard() {} logic triggered by window onload
@@ -426,31 +411,31 @@ window.addEventListener(
     if (e.defaultPrevented) {
       return; // Do nothing if event was already processed
     }
-
-    switch (e.key) {
-      case "ArrowDown":
-        // slide(down)
-        slide("down");
-        break;
-      case "ArrowUp":
-        // slide(up)
-        slide("up");
-        break;
-      case "ArrowLeft":
-        // slide(left)
-        slide("left");
-        break;
-      case "ArrowRight":
-        // slide(right)
-        slide("right");
-        break;
-      case "Escape":
-        // requestRestart()
-        break;
-      default:
-        return; // Quit when this doesn't handle the key event
+    if (game === true) {
+      switch (e.key) {
+        case "ArrowDown":
+          // slide(down)
+          slide("down");
+          break;
+        case "ArrowUp":
+          // slide(up)
+          slide("up");
+          break;
+        case "ArrowLeft":
+          // slide(left)
+          slide("left");
+          break;
+        case "ArrowRight":
+          // slide(right)
+          slide("right");
+          break;
+        case "Escape":
+          // requestRestart()
+          break;
+        default:
+          return; // Quit when this doesn't handle the key event
+      }
     }
-
     e.preventDefault();
   },
   true
@@ -470,3 +455,8 @@ window.addEventListener("keydown", function (e) {
 
 // Colour palette settings: settings dropdown menu
 // addEventListener
+// window.onclick = function(event) {
+//   if (event.target == modal) {
+//     modal.style.display = "none";
+//   }
+// }

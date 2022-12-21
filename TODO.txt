@@ -66,6 +66,7 @@ Remaining tasks:
 2. Triggering game over 
 //    a. countTileValue(0) === 0 then
 //    b. GameOver()
+//        i. added game = false to prevent arrow keys from triggering slide()
     c. Restart()
 
 3. dropdown.AddEventListener for changing colours

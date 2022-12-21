@@ -57,12 +57,14 @@ p {
 
 /* Popup container for gameOver()  */
 /* .popup { */
-  /* display: inline-block; */
-  /* cursor: pointer; */
+/* display: inline-block; */
+/* cursor: pointer; */
 /* } */
 
 /* The actual popup (appears on top) */
 .popup .popuptext {
+  display: flex;
+  align-items: center;
   width: 160px;
   background-color: #555;
   color: #fff;
