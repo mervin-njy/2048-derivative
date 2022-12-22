@@ -6,26 +6,29 @@
 const body = document.querySelector("body");
 const header = document.querySelector("header");
 const footer = document.querySelector("footer");
+// access classes: board, and tile as nested array of Tile classes
+let board = null;
+let allTiles = [];
 let dropdowns = null; // add this to collect array of dropdown buttons later on
 // let storeScore = 0;   // store best score to reassign best score value after removing DOM elements
 let score = document.querySelector("#score").innerHTML;
 let bestScore = document.querySelector("#best-score").innerHTML;
 let gameState = true;
 // colour palette picker - [2, 4, 8.... >2048, emptyTileCol, board/borderCol]
-const bluePalette = [
-  "#eef6ff", // 2 + later font colors
-  "#cdddee", // 4
-  "#a8c4e4", // 8
-  "#789cc2", // 16
-  "#53779d", // 32
-  "#416082", // 64
-  "#274361", // 128
-  "#183453", // 256
-  "#11263E", // 512
-  "#0B1A2C", // 1024
-  "#050F1D", // >= 2048 + earlier font colors
-  "#929ca7", // 0
-  "#283845", // border colour
+const redPalette = [
+  "#F3DEDA", // 2 + later font colors
+  "#E9C9C3", // 4
+  "#D3978C", // 8
+  "#CE8678", // 16
+  "#C97261", // 32
+  "#BF604C", // 64
+  "#9F402D", // 128
+  "#8A3220", // 256
+  "#732516", // 512
+  "#5B1B0F", // 1024
+  "#390E06", // >= 2048 + earlier font colors #390E06
+  "#BFA49F", // 0
+  "#220702", // border colour
 ];
 const greenPalette = [
   "#D5EFF0", // 2 + later font colors
@@ -42,6 +45,21 @@ const greenPalette = [
   "#80918C", // 0
   "#284445", // border colour
 ];
+const bluePalette = [
+  "#eef6ff", // 2 + later font colors
+  "#cdddee", // 4
+  "#a8c4e4", // 8
+  "#789cc2", // 16
+  "#53779d", // 32
+  "#416082", // 64
+  "#274361", // 128
+  "#183453", // 256
+  "#11263E", // 512
+  "#0B1A2C", // 1024
+  "#050F1D", // >= 2048 + earlier font colors
+  "#929ca7", // 0
+  "#283845", // border colour
+];
 const purplePalette = [
   "#F7EDFF", // 2 + later font colors
   "#E8DFF8", // 4 -- CHANGE THIS
@@ -57,14 +75,14 @@ const purplePalette = [
   "#978E9F", // 0
   "#332845", // border colour
 ];
-const colPalette = purplePalette;
-const minValCol = colPalette[0];
-const maxValCol = colPalette[colPalette.length - 3];
-const emptyTileCol = colPalette[colPalette.length - 2];
-const borderCol = colPalette[colPalette.length - 1];
-const docBackgroundCol = colPalette[Math.floor(colPalette.length * 0.8)];
-const accentCol = colPalette[Math.floor(colPalette.length * 0.7)];
-const accentCol2 = colPalette[Math.floor(colPalette.length * 0.4)];
+let colPalette = greenPalette;
+let minValCol = colPalette[0];
+let maxValCol = colPalette[colPalette.length - 3];
+let emptyTileCol = colPalette[colPalette.length - 2];
+let borderCol = colPalette[colPalette.length - 1];
+let docBackgroundCol = colPalette[Math.floor(colPalette.length * 0.8)];
+let accentCol = colPalette[Math.floor(colPalette.length * 0.7)];
+let accentCol2 = colPalette[Math.floor(colPalette.length * 0.4)];
 // base variables to change grid/tile parameters
 let gridCount = 4; // to be changed if resetBoard() is triggered later on
 const newGridCount = 6;
@@ -73,8 +91,6 @@ const newGridSize = (gridSize / newGridCount) * gridCount;
 const gridBorder = 4;
 const maxInitialTiles = 2;
 const numFontSize = gridSize * 0.35;
-// access tiles as nested array of Tile classes
-let allTiles = [];
 
 ////////////////////--------------------------------------------------------------------------------------------
 // CLASSES -----------------------------------------------------------------------------------------------------
@@ -148,7 +164,9 @@ class Tile {
     // fixed border colour
     this.DOM.style.borderColor = borderCol;
     // change tile colours
-    if (this.num <= 2048) {
+    if (this.num < 2) {
+      this.DOM.style.backgroundColor = emptyTileCol;
+    } else if (this.num <= 2048) {
       // Math.log(this.num) / Math.log(2) - 0 is the opposite of math.pow()
       // ind  = 0, 1, 2, 3, 4... 11... => val = math.pow(2, ind) = 1, 2, 4, 8, 16... 2048... (let's just take 1 as 0 with val <2)
       this.DOM.style.backgroundColor =
@@ -191,8 +209,10 @@ class Dropdown {
   constructor() {
     (this.container = null),
       (this.select = null),
+      (this.selected = null),
       (this.arrow = null),
       (this.menu = null),
+      (this.option = null),
       (this.active = null);
   }
 
@@ -200,8 +220,10 @@ class Dropdown {
     // assign this. properties with DOM selector
     this.container = document.querySelector(".dropdown");
     this.select = document.querySelector(".select");
+    this.selected = document.querySelector(".selected");
     this.arrow = document.querySelector(".arrow");
     this.menu = document.querySelector(".menu");
+    this.options = document.querySelectorAll(".menu li");
     this.active = document.querySelector(".active");
 
     // update dimensions - to match the tiles
@@ -212,6 +234,12 @@ class Dropdown {
     this.menu.style.border = gridBorder / 4 + "px solid";
 
     // change colours
+    this.updateColour();
+  }
+
+  updateColour() {
+    // change dropdown colours
+    console.log("Updating dropdown colours");
     this.select.style.backgroundColor = maxValCol;
     this.select.style.color = minValCol;
     this.select.style.borderColor = minValCol;
@@ -219,6 +247,71 @@ class Dropdown {
     this.menu.style.borderColor = maxValCol;
     this.menu.style.color = accentCol2;
     this.active.style.backgroundColor = maxValCol;
+  }
+
+  assignListeners() {
+    // click event to select element (dropdown button)
+    this.select.addEventListener("click", () => {
+      // add clicked select style transition
+      this.select.classList.toggle("select-clicked", true);
+      // add arrow rotation style transition
+      this.arrow.classList.toggle("arrow-rotate", true);
+      // add menu opening style transition
+      this.menu.classList.toggle("menu-open", true);
+    });
+
+    // click event for all menu options
+    this.options.forEach((option) => {
+      option.addEventListener("click", () => {
+        // remove select-clicked class to prevent the style transition
+        this.select.classList.toggle("select-clicked", false);
+        // remove rotating transition
+        this.arrow.classList.toggle("arrow-rotate", false);
+        // remove menu opening style transition
+        this.menu.classList.toggle("menu-open", false);
+        // remove active class from all menu items
+        this.active.classList.remove("active");
+        // add active class to currently clicked item from menu
+        option.classList.add("active");
+        this.active = option;
+        console.log(`active colour is now ${this.active.innerText}`);
+
+        this.resetColour();
+      });
+    });
+  }
+
+  resetColour() {
+    // checks active colour to change colour palette
+    if (this.active.innerText === "red") {
+      colPalette = redPalette;
+    } else if (this.active.innerText === "green") {
+      colPalette = greenPalette;
+    } else if (this.active.innerText === "blue") {
+      colPalette = bluePalette;
+    } else if (this.active.innerText === "purple") {
+      colPalette = purplePalette;
+    }
+    console.log("resetting colour");
+    // update colour variables
+    minValCol = colPalette[0];
+    maxValCol = colPalette[colPalette.length - 3];
+    emptyTileCol = colPalette[colPalette.length - 2];
+    borderCol = colPalette[colPalette.length - 1];
+    docBackgroundCol = colPalette[Math.floor(colPalette.length * 0.8)];
+    accentCol = colPalette[Math.floor(colPalette.length * 0.7)];
+    accentCol2 = colPalette[Math.floor(colPalette.length * 0.4)];
+
+    // reset colour for the button selection too!
+    this.updateColour();
+
+    // trigger updateColour() for Board & Tile classes
+    board.updateColour();
+    for (let r = 0; r < allTiles.length; r++) {
+      for (let c = 0; c < allTiles[r].length; c++) {
+        allTiles[r][c].updateColour();
+      }
+    }
   }
 }
 
@@ -287,13 +380,14 @@ const resetBoard = () => {
 // setBoard() {} logic triggered by window onload
 const setBoard = () => {
   // constructs new board element with properties based on grid count, default = 4
-  const newBoard = new Board();
-  newBoard.constructDOM();
+  board = new Board();
+  board.constructDOM();
   // construct tiles after board is set up
   createTiles();
   // update button dropdowns
   const newDropdown = new Dropdown();
   newDropdown.updateDOM();
+  newDropdown.assignListeners();
 };
 
 // createTiles() {} logic triggered by setBoard()
@@ -584,11 +678,3 @@ window.addEventListener("keydown", function (e) {
       break;
   }
 });
-
-// Colour palette settings: settings dropdown menu
-// addEventListener
-// window.onclick = function(event) {
-//   if (event.target == modal) {
-//     modal.style.display = "none";
-//   }
-// }
