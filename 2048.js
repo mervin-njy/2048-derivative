@@ -243,14 +243,8 @@ class Tile {
         numFontSize - this.num.toString().length * 3 + "px";
     }
 
-    // add combine and slide animation keyframes here by updating transformX and transformY values
-    // document.documentElement.style.setProperty("--transformTile-X", xformX);
-    // document.documentElement.style.setProperty("--transformTile-Y", xformY);
-    console.log(
-      `tile index ${this.id} has combination event: ${this.combined}`
-    );
+    // add combine animation keyframes by toggling the class
     if (this.combined) {
-      // this.DOM.style.animation = "combine 0.5s";
       this.DOM.classList.toggle("tile-combine");
     }
   }
@@ -772,7 +766,6 @@ const slide = (dir) => {
 
   // checks if after combination, array is the same: false => change / true => don't change
   if (checkDuplicate(allTiles, combinedArr) === false) {
-    console.log(checkCombinedArr);
     // 4. convert numbers back to .num of each tile & check for combination animation
     // maps combinedArr values into allTiles' tile classes
     for (let r = 0; r < allTiles.length; r++) {
