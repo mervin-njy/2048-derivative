@@ -9,6 +9,7 @@ const footer = document.querySelector("footer");
 // access classes: board, and tile as nested array of Tile classes
 let board = null;
 let allTiles = [];
+let instruction = document.querySelector(".instructions");
 let dropdowns = null; // add this to collect array of dropdown buttons later on
 // let storeScore = 0;   // store best score to reassign best score value after removing DOM elements
 let score = document.querySelector("#score").innerHTML;
