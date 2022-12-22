@@ -8,11 +8,12 @@ const header = document.querySelector("header");
 const footer = document.querySelector("footer");
 const instructButton = document.querySelector(".instruction");
 const fillTilesButton = document.querySelector(".fill-tiles");
-// access classes: board, and tile as nested array of Tile classes
+// access classes and elements that can be reset
 let board = null;
 let allTiles = [];
 let instruction = document.querySelector(".instructions");
 let fillTiles = false; // fill tiles true => display tiles up to 2048 ++, fale => back to randomized starting
+let dropdown = null;
 // let storeScore = 0;   // store best score to reassign best score value after removing DOM elements
 let score = document.querySelector("#score").innerHTML;
 let bestScore = document.querySelector("#best-score").innerHTML;
@@ -356,17 +357,27 @@ class Dropdown {
 // restarts game either by clicking restart at gameOver or restart button in menu
 
 // ----------------------------------------------------------------------------------------- regarding the game
-const restartGame = () => {
-  // remove all existing game elements
+// reset all game values (except for best score)
+const resetValues = () => {
+  // remove board
   document.querySelector("#board").remove();
-  document.querySelector(".modal").remove();
   // reset allTiles array to clean slate
   allTiles = [];
+  // reset score
+  score = 0;
+};
+
+// resets the game other than best score
+const restartGame = () => {
+  // remove modal board that has been created from gameOver
+  document.querySelector(".modal").remove();
   // reset score and replace high score if it is higher than it
   if (Number(score) > Number(bestScore)) bestScore = score;
-  score = 0;
+  // remove all game values (other than best score)
+  resetValues();
   // reset game state and reset board for new game
   gameState = true;
+  // set board again to restart
   setBoard();
 };
 
@@ -460,10 +471,8 @@ const openInstructions = () => {
 const fillAllTiles = () => {
   console.log("Filling tiles for you :)");
 
-  // remove current board
-  document.querySelector("#board").remove();
-  // reset allTiles array to clean slate
-  allTiles = [];
+  // remove all game values (other than best score)
+  resetValues();
 
   // toggles fillTile with each click
   if (fillTiles === false) fillTiles = true;
@@ -488,9 +497,9 @@ const setBoard = () => {
   // construct tiles after board is set up
   createTiles();
   // update button dropdowns
-  const newDropdown = new Dropdown();
-  newDropdown.updateDOM();
-  newDropdown.assignListeners();
+  dropdown = new Dropdown();
+  dropdown.updateDOM();
+  dropdown.assignListeners();
 };
 
 // createTiles() {} logic triggered by setBoard()
