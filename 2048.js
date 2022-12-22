@@ -20,49 +20,49 @@ let bestScore = document.querySelector("#best-score").innerHTML;
 let gameState = true;
 // colour palette picker - [2, 4, 8.... >2048, emptyTileCol, board/borderCol]
 const redPalette = [
-  "#F3DEDA", // 2 + later font colors
-  "#E9C9C3", // 4
-  "#D3978C", // 8
-  "#CE8678", // 16
-  "#C97261", // 32
-  "#BF604C", // 64
-  "#9F402D", // 128
-  "#8A3220", // 256
-  "#732516", // 512
-  "#5B1B0F", // 1024
-  "#390E06", // >= 2048 + earlier font colors #390E06
+  "#F1E4E4", // 2 + later font colors
+  "#EBD2D2", // 4
+  "#E7C1C1", // 8
+  "#DCA8A8", // 16
+  "#D19090", // 32
+  "#C47D7D", // 64
+  "#A76060", // 128
+  "#904E4E", // 256
+  "#7A3C3C", // 512
+  "#652C2C", // 1024
+  "#491C1C", // >= 2048 + earlier font colors #390E06
   "#BFA49F", // 0
-  "#220702", // border colour
+  "#582B2B", // border colour
 ];
 const orangePalette = [
-  "#F1CEB7", // 2 + later font colors
-  "#E2BDA5", // 4
-  "#D8AD91", // 8
-  "#CE9D7D", // 16
-  "#CC946F", // 32
-  "#C98A60", // 64
-  "#C27D4F", // 128
-  "#A16239", // 256
-  "#7F4723", // 512
-  "#5C2D0E", // 1024
-  "#361804", // >= 2048 + earlier font colors
+  "#FFECE5", // 2 + later font colors
+  "#ECC7B8", // 4
+  "#EBB8A4", // 8
+  "#DCA690", // 16
+  "#CB957F", // 32
+  "#B8816D", // 64
+  "#A5705C", // 128
+  "#95614E", // 256
+  "#7F5343", // 512
+  "#6F4636", // 1024
+  "#603A2D", // >= 2048 + earlier font colors
   "#BDB0A7", // 0
-  "#453328", // border colour
+  "#453228", // border colour
 ];
 const yellowPalette = [
-  "#E9E9C6", // 2 + later font colors
-  "#E1E1A2", // 4
-  "#D0D087", // 8
-  "#C7C75E", // 16
-  "#A2A248", // 32
-  "#858532", // 64
-  "#6C6C1F", // 128
-  "#515110", // 256
-  "#424207", // 512
-  "#474717", // 1024
-  "#2F2F03", // >= 2048 + earlier font colors
-  "#BBBBA5", // 0
-  "#25250A", // border colour
+  "#FFF9D3", // 2 + later font colors
+  "#FFF4AF", // 4
+  "#FFEF86", // 8
+  "#F5E894", // 16
+  "#ECDE82", // 32
+  "#E4D575", // 64
+  "#DACA5F", // 128
+  "#CEBE53", // 256
+  "#BFAE43", // 512
+  "#B0A038", // 1024
+  "#8C7C10", // >= 2048 + earlier font colors
+  "#D0CAA8", // 0
+  "#93873B", // border colour
 ];
 const greenPalette = [
   "#D5EFF0", // 2 + later font colors
@@ -81,16 +81,16 @@ const greenPalette = [
 ];
 const bluePalette = [
   "#eef6ff", // 2 + later font colors
-  "#cdddee", // 4
+  "#D2E5FA", // 4
   "#a8c4e4", // 8
   "#789cc2", // 16
   "#53779d", // 32
   "#416082", // 64
-  "#274361", // 128
-  "#183453", // 256
-  "#11263E", // 512
-  "#0B1A2C", // 1024
-  "#050F1D", // >= 2048 + earlier font colors
+  "#2E4F71", // 128
+  "#23415F", // 256
+  "#183453", // 512
+  "#11263E", // 1024
+  "#0B1A2C", // >= 2048 + earlier font colors
   "#929ca7", // 0
   "#283845", // border colour
 ];
@@ -105,7 +105,7 @@ const purplePalette = [
   "#6B5C82", // 256
   "#53456A", // 512
   "#44365B", // 1024
-  "#1B1425", // >= 2048 + earlier font colors
+  "#2B2039", // >= 2048 + earlier font colors
   "#978E9F", // 0
   "#332845", // border colour
 ];
