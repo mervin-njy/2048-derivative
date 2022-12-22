@@ -96,9 +96,9 @@ const bluePalette = [
 ];
 const purplePalette = [
   "#F7EDFF", // 2 + later font colors
-  "#E8DFF8", // 4 -- CHANGE THIS
-  "#DED0F5", // 8
-  "#C8B8E2", // 16
+  "#E0D5F3", // 4 -- CHANGE THIS
+  "#D2C4E7", // 8
+  "#BDAED5", // 16
   "#B0A0CB", // 32
   "#9E8DBA", // 64
   "#84759A", // 128
@@ -118,7 +118,7 @@ let docBackgroundCol = colPalette[Math.floor(colPalette.length * 0.8)];
 let accentCol = colPalette[Math.floor(colPalette.length * 0.7)];
 let accentCol2 = colPalette[Math.floor(colPalette.length * 0.4)];
 // base variables to change grid/tile parameters
-let gridCount = 4; // to be changed if resetBoard() is triggered later on
+let gridCount = 5; // to be changed if resetBoard() is triggered later on
 const newGridCount = 6;
 let gridSize = 100; // to be changed if resetBoard() triggered later on
 const newGridSize = (gridSize / newGridCount) * gridCount;
@@ -149,7 +149,7 @@ class Board {
     newBoard.style.border = gridBorder + "px solid";
     newBoard.style.backgroundColor = borderCol;
     newBoard.style.borderRadius = gridBorder * 2 + "px";
-    newBoard.style.borderColor = maxValCol;
+    newBoard.style.borderColor = borderCol;
 
     this.DOM = newBoard;
     header.after(newBoard);
@@ -159,8 +159,8 @@ class Board {
   updateColour() {
     body.style.backgroundColor = maxValCol;
     body.style.color = minValCol;
-    this.DOM.style.backgroundColor = maxValCol;
-    this.DOM.style.borderColor = maxValCol;
+    this.DOM.style.backgroundColor = borderCol;
+    this.DOM.style.borderColor = borderCol;
   }
 }
 
@@ -281,7 +281,7 @@ class Dropdown {
     // dimension calculations
     const border = gridBorder / 4;
     const margin = (gridBorder * 3) / 4;
-    const width = gridSize - (margin + border) * 2;
+    const width = gridSize - (margin + border) * 4;
     // update dimensions (of dropdown DOM) - to match the tiles
     this.container.style.width = width + "px";
     this.container.style.margin = margin + "px";
@@ -779,6 +779,7 @@ const slide = (dir) => {
       allTiles[r].map((element, index) => {
         element.DOM.classList.toggle("tile-combine", false);
         element.DOM.classList.toggle("tile-appear", false);
+        element.DOM.classList.toggle("tile-slide", false);
         // change number
         element.num = combinedArr[r][index];
         // toggle boolean to trigger animation

@@ -55,10 +55,13 @@ h3 {
 }
 
 .tile-combine {
-  animation: combine 0.5s;
+  animation: combine 0.6s;
 }
 .tile-appear {
-  animation: appear 0.25s;
+  animation: appear 0.3s;
+}
+.tile-slide {
+  animation: slide 0.4s;
 }
 
 /* footer to contain instructions ---------------------------------------------------*/
@@ -94,9 +97,10 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 13px;
 
   border-radius: 0.5em;
-  padding: 0.5em;
+  padding: 0.4em;
   cursor: pointer;
   transition: background 0.3s;
 }
@@ -267,14 +271,10 @@ h2:hover {
 
 @keyframes combine {
   from {
-    transform: translateX(--translateTile-X);
-    transform: translateY(--translateTile-Y);
     scale: 80%;
   }
 
   to {
-    transform: translateX(--translateTile-X);
-    transform: translateY(--translateTile-Y);
     scale: 100%;
   }
 }
@@ -286,5 +286,17 @@ h2:hover {
 
   to {
     scale: 100%;
+  }
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(--translateTile-X);
+    transform: translateY(--translateTile-Y);
+  }
+
+  to {
+    transform: translateX(--translateTile-X);
+    transform: translateY(--translateTile-Y);
   }
 }
