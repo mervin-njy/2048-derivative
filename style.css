@@ -81,6 +81,7 @@ footer {
 }
 
 .instruction,
+.fill-tiles,
 .select {
   /* selected item displayed on button */
   display: flex;
@@ -94,6 +95,7 @@ footer {
 }
 
 .instruction:hover,
+.fill-tiles:hover,
 .select:hover {
   opacity: 70%;
 }

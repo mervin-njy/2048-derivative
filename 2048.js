@@ -7,11 +7,12 @@ const body = document.querySelector("body");
 const header = document.querySelector("header");
 const footer = document.querySelector("footer");
 const instructButton = document.querySelector(".instruction");
+const fillTilesButton = document.querySelector(".fill-tiles");
 // access classes: board, and tile as nested array of Tile classes
 let board = null;
 let allTiles = [];
 let instruction = document.querySelector(".instructions");
-let dropdowns = null; // add this to collect array of dropdown buttons later on
+let fillTiles = false; // fill tiles true => display tiles up to 2048 ++, fale => back to randomized starting
 // let storeScore = 0;   // store best score to reassign best score value after removing DOM elements
 let score = document.querySelector("#score").innerHTML;
 let bestScore = document.querySelector("#best-score").innerHTML;
@@ -249,9 +250,13 @@ class Dropdown {
     this.select.style.border = border + "px solid";
     this.menu.style.border = border + "px solid";
     // update dimensions (of buttons as well) - to match the tiles
-    instructButton.style.width = width + "px";
-    instructButton.style.margin = margin + "px";
-    instructButton.style.border = border + "px solid";
+    const buttonDimension = (btn) => {
+      btn.style.width = width + "px";
+      btn.style.margin = margin + "px";
+      btn.style.border = border + "px solid";
+    };
+    buttonDimension(instructButton);
+    buttonDimension(fillTilesButton);
 
     // change colours
     this.updateColour();
@@ -268,9 +273,13 @@ class Dropdown {
     this.menu.style.color = accentCol2;
     this.active.style.backgroundColor = maxValCol;
     // change button colours to match too
-    instructButton.style.backgroundColor = maxValCol;
-    instructButton.style.color = minValCol;
-    instructButton.style.borderColor = minValCol;
+    const buttonColour = (btn) => {
+      btn.style.backgroundColor = maxValCol;
+      btn.style.color = minValCol;
+      btn.style.borderColor = minValCol;
+    };
+    buttonColour(instructButton);
+    buttonColour(fillTilesButton);
     // change selection background colour
     document.documentElement.style.setProperty("--highlight-color", accentCol2);
   }
@@ -400,6 +409,7 @@ const gameOver = () => {
   });
 };
 
+// -------------------------------------------------------------------------------------- regarding the buttons
 // similar to gameOver modal box - open one to display instructions
 const openInstructions = () => {
   console.log("Showing game instructions");
@@ -446,6 +456,23 @@ const openInstructions = () => {
   });
 };
 
+// fill-tiles button triggers filling of tiles to showcase colour palette
+const fillAllTiles = () => {
+  console.log("Filling tiles for you :)");
+
+  // remove current board
+  document.querySelector("#board").remove();
+  // reset allTiles array to clean slate
+  allTiles = [];
+
+  // toggles fillTile with each click
+  if (fillTiles === false) fillTiles = true;
+  else fillTiles = false;
+
+  // reset board - but create of tiles with new fillTiles boolean
+  setBoard();
+};
+
 // -------------------------------------------------------------------- regarding board & tile element creation
 const resetBoard = () => {
   gridSize = newGridSize;
@@ -473,11 +500,17 @@ const createTiles = () => {
   // randomly generate starting tiles with empty values
   for (let i = 0; i < gridCount * gridCount; i++) {
     // construct new tile class to store index and value (col (x), row (y), num)
-    const newTile = new Tile(
-      i % gridCount,
-      Math.floor(i / gridCount)
-      // Math.pow(2, i)
-    );
+    let newTile = null;
+    // false => create tiles by default, 2 random ones
+    if (fillTiles === false) {
+      newTile = new Tile(i % gridCount, Math.floor(i / gridCount));
+    } else {
+      // true => create tiles up to 2048
+      let tileNum = 2;
+      if (i > 0) tileNum = Math.pow(2, i);
+      newTile = new Tile(i % gridCount, Math.floor(i / gridCount), tileNum);
+    }
+
     // num = Math.pow(2, i) to see values with colours
     newTile.constructDOM();
 
@@ -490,8 +523,8 @@ const createTiles = () => {
     }
   }
 
-  // generate specific number of tiles to have starting values at random
-  generateNew(maxInitialTiles, countTileValue(0));
+  // generate specific number of tiles to have starting values at random - only if fillTiles === false
+  if (fillTiles === false) generateNew(maxInitialTiles, countTileValue(0));
 };
 
 // -------------------------------------------------------------------------------- general functions for reuse
@@ -570,7 +603,7 @@ const combineTiles = (row) => {
 // slide(dir) {} Logic
 const slide = (dir) => {
   console.log("Sliding " + dir);
-  // console.log(allTiles);
+  console.log(allTiles);
   // for transposing array if dir === up and down
   const transposeArray = (nestedArray) => {
     const newArray = [];
@@ -757,6 +790,12 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
+// triggers popup window to display instructions
 instructButton.addEventListener("click", () => {
   openInstructions();
+});
+
+// toggles fill tiles to show tiles w/ colour palette
+fillTilesButton.addEventListener("click", () => {
+  fillAllTiles();
 });
