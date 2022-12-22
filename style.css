@@ -115,7 +115,7 @@ footer {
 }
 
 .arrow-rotate {
-  /* added in javascript */
+  /* added in javascript - flips dropdown arrow from down to up */
   transform: rotate(180deg);
 }
 

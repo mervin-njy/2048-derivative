@@ -95,16 +95,16 @@ const newGridSize = (gridSize / newGridCount) * gridCount;
 const gridBorder = 4;
 const maxInitialTiles = 2;
 const numFontSize = gridSize * 0.35;
-
+const buttonWidth = gridSize; // this ensures that button size doesn't change even if board is reset
 ////////////////////--------------------------------------------------------------------------------------------
 // CLASSES -----------------------------------------------------------------------------------------------------
-// class Tile {} to store tile id and values, combine functions
+// class Board {} to store board DOM and functions to manipulate it with events
 class Board {
-  // default tiles = 4 since its a 4x4 grid. Trigger event becomes 8
   constructor() {
     this.DOM = null;
   }
 
+  // sets DOM element properties once setBoard() or resetBoard() is invoked
   constructDOM() {
     body.style.backgroundColor = maxValCol;
     body.style.color = minValCol;
@@ -125,6 +125,7 @@ class Board {
     header.after(newBoard);
   }
 
+  // updates DOM colour properties when colour palette is swapped
   updateColour() {
     body.style.backgroundColor = maxValCol;
     body.style.color = minValCol;
@@ -133,7 +134,9 @@ class Board {
   }
 }
 
+// class Tile {} to store tile id and values, combine functions
 class Tile {
+  // create id="trc", where r=row indices & c=column indices, also stores tile value under .num
   constructor(colInd, rowInd, num = 0) {
     (this.x = colInd),
       (this.y = rowInd),
@@ -142,7 +145,7 @@ class Tile {
       (this.DOM = null);
   }
 
-  // construct DOM element with assigned value
+  // sets DOM element properties once createTiles() is invoked
   constructDOM() {
     //<div id="x y>">num</div>
     const newTile = document.createElement("div");
@@ -152,18 +155,20 @@ class Tile {
     newTile.style.border = gridBorder + "px solid";
     newTile.style.borderRadius = gridBorder * 2 + "px";
 
-    // add classes for .tile, and tile+num
+    // add DOM classes for .tile and create tile within board DOM
     newTile.classList.add("tile");
     this.DOM = newTile;
     this.updateDOM();
     document.querySelector("#board").append(newTile);
   }
 
+  // updateDOM has 2 update functions - to separate updateColour() when colour dropdown event is triggered
   updateDOM() {
     this.updateColour();
     this.updateNum();
   }
 
+  // said updateColour() function
   updateColour() {
     // fixed border colour
     this.DOM.style.borderColor = borderCol;
@@ -179,7 +184,7 @@ class Tile {
       this.DOM.style.backgroundColor = maxValCol;
     }
 
-    // after tile 8, the font colour changes to white
+    // after tile 8, the font colour changes to lightest shade of palette (contrast with dark background)
     if (this.num <= Math.pow(2, 3)) {
       this.DOM.style.color = maxValCol;
     } else {
@@ -187,7 +192,7 @@ class Tile {
     }
   }
 
-  // update DOM element's parameters whenever it is changed
+  // update DOM element's number & font properties whenever it is changed from slide(), also triggers animation
   updateNum() {
     // update score
     document.querySelector("#score").innerHTML = score;
@@ -206,9 +211,12 @@ class Tile {
       this.DOM.style.fontSize =
         numFontSize - this.num.toString().length * 3 + "px";
     }
+
+    // add combine and slide animation keyframes here
   }
 }
 
+// dropdown menu DOM creation within this class
 class Dropdown {
   constructor() {
     (this.container = null),
@@ -234,23 +242,22 @@ class Dropdown {
     const border = gridBorder / 4;
     const margin = (gridBorder * 3) / 4;
     const width = gridSize - (margin + border) * 2;
-    // update dimensions - to match the tiles
-    instructButton.style.width = width + "px";
-    instructButton.style.margin = margin + "px";
+    // update dimensions (of dropdown DOM) - to match the tiles
     this.container.style.width = width + "px";
     this.container.style.margin = margin + "px";
     this.select.style.width = width + "px";
     this.select.style.border = border + "px solid";
     this.menu.style.border = border + "px solid";
+    // update dimensions (of buttons as well) - to match the tiles
+    instructButton.style.width = width + "px";
+    instructButton.style.margin = margin + "px";
+    instructButton.style.border = border + "px solid";
 
     // change colours
     this.updateColour();
   }
 
   updateColour() {
-    instructButton.style.backgroundColor = maxValCol;
-    instructButton.style.color = minValCol;
-    instructButton.style.borderColor = minValCol;
     // change dropdown colours
     console.log("Updating dropdown colours");
     this.select.style.backgroundColor = maxValCol;
@@ -260,8 +267,13 @@ class Dropdown {
     this.menu.style.borderColor = maxValCol;
     this.menu.style.color = accentCol2;
     this.active.style.backgroundColor = maxValCol;
+    // change button colours to match too
+    instructButton.style.backgroundColor = maxValCol;
+    instructButton.style.color = minValCol;
+    instructButton.style.borderColor = minValCol;
   }
 
+  // sets event listeners for dropdown clicks
   assignListeners() {
     // click event to select element (dropdown button)
     this.select.addEventListener("click", () => {
