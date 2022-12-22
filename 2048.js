@@ -34,8 +34,36 @@ const redPalette = [
   "#BFA49F", // 0
   "#220702", // border colour
 ];
-const yellowPalette = [];
-const orangePalette = [];
+const orangePalette = [
+  "#F1CEB7", // 2 + later font colors
+  "#E2BDA5", // 4
+  "#D8AD91", // 8
+  "#CE9D7D", // 16
+  "#CC946F", // 32
+  "#C98A60", // 64
+  "#C27D4F", // 128
+  "#A16239", // 256
+  "#7F4723", // 512
+  "#5C2D0E", // 1024
+  "#361804", // >= 2048 + earlier font colors
+  "#BDB0A7", // 0
+  "#453328", // border colour
+];
+const yellowPalette = [
+  "#E9E9C6", // 2 + later font colors
+  "#E1E1A2", // 4
+  "#D0D087", // 8
+  "#C7C75E", // 16
+  "#A2A248", // 32
+  "#858532", // 64
+  "#6C6C1F", // 128
+  "#515110", // 256
+  "#424207", // 512
+  "#474717", // 1024
+  "#2F2F03", // >= 2048 + earlier font colors
+  "#BBBBA5", // 0
+  "#25250A", // border colour
+];
 const greenPalette = [
   "#D5EFF0", // 2 + later font colors
   "#AACECE", // 4
@@ -119,7 +147,7 @@ class Board {
     newBoard.style.width = gridSize * gridCount + "px";
     newBoard.style.height = gridSize * gridCount + "px";
     newBoard.style.border = gridBorder + "px solid";
-    newBoard.style.backgroundColor = maxValCol;
+    newBoard.style.backgroundColor = borderCol;
     newBoard.style.borderRadius = gridBorder * 2 + "px";
     newBoard.style.borderColor = maxValCol;
 
@@ -322,6 +350,10 @@ class Dropdown {
     // checks active colour to change colour palette
     if (this.active.innerText === "red") {
       colPalette = redPalette;
+    } else if (this.active.innerText === "orange") {
+      colPalette = orangePalette;
+    } else if (this.active.innerText === "yellow") {
+      colPalette = yellowPalette;
     } else if (this.active.innerText === "green") {
       colPalette = greenPalette;
     } else if (this.active.innerText === "blue") {

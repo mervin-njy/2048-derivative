@@ -196,6 +196,7 @@ p {
 
 /* modal Content */
 .modal-content {
+  transform: translateY(-40%);
   margin: auto;
   padding: 2em 3em;
   border: 0px solid;
