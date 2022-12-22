@@ -58,7 +58,7 @@ h3 {
 footer {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 auto;
+  margin: 2em auto;
   text-align: left;
 }
 
@@ -164,15 +164,17 @@ footer {
 /* fonts in footer */
 
 h4 {
-  font-size: 18px;
+  text-align: left;
+  font-size: 30px;
   font-weight: 500;
+  margin-top: 0;
 }
 
 p {
   text-align: justify;
   letter-spacing: 2px;
-  font-size: 12px;
-  line-height: 20px;
+  font-size: 14px;
+  line-height: 22px;
 }
 
 /* modal (background) */
@@ -193,7 +195,7 @@ p {
 /* modal Content */
 .modal-content {
   margin: auto;
-  padding: 20px;
+  padding: 2em 3em;
   border: 0px solid;
   border-radius: 10px;
   opacity: 0.9;
@@ -201,26 +203,30 @@ p {
   box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* modal restart button */
+/* modal close & restart button */
+.close-button,
 .restart-button {
-  width: 120px;
+  width: 12em;
   height: 30px;
 
   letter-spacing: 0.5px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
 
+  margin-top: 2em;
   border: 0px;
   border-radius: 5px;
   padding: 2px;
 }
 
+.close-button:hover,
+.close-button:focus,
 .restart-button:hover,
 .restart-button:focus {
   text-decoration: none;
   cursor: pointer;
   font-size: 15px;
-  font-weight: bold;
+  font-weight: 900;
 
   background-color: black;
   color: white;
@@ -236,4 +242,13 @@ h1:hover,
 h2:hover {
   font-weight: bolder;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+/* change text highlight colour based on colour palette chosen (in javascript) */
+:root {
+  --highlight-color: null;
+}
+
+::selection {
+  background-color: var(--highlight-color);
 }

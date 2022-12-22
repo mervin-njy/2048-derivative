@@ -271,6 +271,8 @@ class Dropdown {
     instructButton.style.backgroundColor = maxValCol;
     instructButton.style.color = minValCol;
     instructButton.style.borderColor = minValCol;
+    // change selection background colour
+    document.documentElement.style.setProperty("--highlight-color", accentCol2);
   }
 
   // sets event listeners for dropdown clicks
@@ -365,7 +367,7 @@ const gameOver = () => {
   console.log("Game over. Would you like to restart?");
 
   const mainColour = docBackgroundCol;
-  const accentColour = colPalette[0];
+  const accentColour = minValCol;
   // create HTML DOM: Modal & modal content
   // <div class="modal">
   const modalBox = document.createElement("div");
@@ -398,7 +400,51 @@ const gameOver = () => {
   });
 };
 
-const openInstructions = () => {};
+// similar to gameOver modal box - open one to display instructions
+const openInstructions = () => {
+  console.log("Showing game instructions");
+
+  const mainColour = docBackgroundCol;
+  const accentColour = minValCol;
+  // create HTML DOM: Modal & modal content
+  // <div class="modal">
+  const modalBox = document.createElement("div");
+  modalBox.classList.add("modal");
+  //  <div class="modal-content">
+  const modalDisplay = document.createElement("div");
+  modalDisplay.classList.add("modal-content");
+  modalDisplay.style.width = gridSize * gridCount * 2 + "px";
+  modalDisplay.style.backgroundColor = mainColour;
+  modalDisplay.style.color = accentColour;
+  //      <h3>instruction text</h3>
+  const modalTitle = document.createElement("h4");
+  modalTitle.innerText = "How to play:";
+  modalDisplay.append(modalTitle);
+  //      <h3>instruction text</h3>
+  const modalText1 = document.createElement("p");
+  modalText1.innerText =
+    "2048 is a puzzle game that progresses with sliding tiles. The goal is to accumulate tiles of as high value as possible. To achieve this, you can slide the board in one direction in each turn, and adjacent tiles with the same number on them can be combined, and the tile will double in value.";
+  const modalText2 = document.createElement("p");
+  modalText2.innerText =
+    "There are only 4 directions to slide - up, down, left and right! Just use the arrow keys on your keyboard to activate your move.";
+  modalDisplay.append(modalText1, modalText2);
+
+  //      <button class="close-button">X</button>
+  const closeButton = document.createElement("button");
+  closeButton.classList.add("close-button");
+  closeButton.innerText = "Got it, let me play!";
+  closeButton.style.backgroundColor = accentColour;
+  closeButton.style.color = mainColour;
+  modalText2.after(closeButton);
+  // </div></div>
+  modalBox.append(modalDisplay);
+  header.after(modalBox);
+
+  // add event listener for close button to remove instruction display
+  closeButton.addEventListener("click", () => {
+    document.querySelector(".modal").remove();
+  });
+};
 
 // -------------------------------------------------------------------- regarding board & tile element creation
 const resetBoard = () => {
