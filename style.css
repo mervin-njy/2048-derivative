@@ -42,7 +42,6 @@ h3 {
 #board {
   display: flex;
   flex-wrap: wrap;
-
   margin: 30px auto;
   box-shadow: 0.1em 0.1em 1.5em rgba(255, 255, 255, 0.3);
 }
@@ -57,6 +56,8 @@ h3 {
 
 /* footer to contain instructions ---------------------------------------------------*/
 footer {
+  display: flex;
+  flex-wrap: wrap;
   margin: 0 auto;
   text-align: left;
 }
@@ -64,9 +65,9 @@ footer {
 /* buttons for colour choices and admin choices ------------------*/
 #button-list {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
-  flex-wrap: wrap;
 }
 
 .dropdown {
@@ -79,17 +80,20 @@ footer {
   box-sizing: border-box;
 }
 
+.instruction,
 .select {
   /* selected item displayed on button */
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   border-radius: 0.5em;
   padding: 0.5em;
   cursor: pointer;
   transition: background 0.3s;
 }
 
+.instruction:hover,
 .select:hover {
   opacity: 70%;
 }

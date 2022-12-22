@@ -6,6 +6,7 @@
 const body = document.querySelector("body");
 const header = document.querySelector("header");
 const footer = document.querySelector("footer");
+const instructButton = document.querySelector(".instruction");
 // access classes: board, and tile as nested array of Tile classes
 let board = null;
 let allTiles = [];
@@ -31,6 +32,8 @@ const redPalette = [
   "#BFA49F", // 0
   "#220702", // border colour
 ];
+const yellowPalette = [];
+const orangePalette = [];
 const greenPalette = [
   "#D5EFF0", // 2 + later font colors
   "#AACECE", // 4
@@ -227,18 +230,27 @@ class Dropdown {
     this.options = document.querySelectorAll(".menu li");
     this.active = document.querySelector(".active");
 
+    // dimension calculations
+    const border = gridBorder / 4;
+    const margin = (gridBorder * 3) / 4;
+    const width = gridSize - (margin + border) * 2;
     // update dimensions - to match the tiles
-    this.container.style.width = gridSize + "px";
-    this.container.style.margin = (gridBorder * 3) / 4 + "px";
-    this.select.style.width = gridSize + "px";
-    this.select.style.border = gridBorder / 4 + "px solid";
-    this.menu.style.border = gridBorder / 4 + "px solid";
+    instructButton.style.width = width + "px";
+    instructButton.style.margin = margin + "px";
+    this.container.style.width = width + "px";
+    this.container.style.margin = margin + "px";
+    this.select.style.width = width + "px";
+    this.select.style.border = border + "px solid";
+    this.menu.style.border = border + "px solid";
 
     // change colours
     this.updateColour();
   }
 
   updateColour() {
+    instructButton.style.backgroundColor = maxValCol;
+    instructButton.style.color = minValCol;
+    instructButton.style.borderColor = minValCol;
     // change dropdown colours
     console.log("Updating dropdown colours");
     this.select.style.backgroundColor = maxValCol;
@@ -254,22 +266,22 @@ class Dropdown {
     // click event to select element (dropdown button)
     this.select.addEventListener("click", () => {
       // add clicked select style transition
-      this.select.classList.toggle("select-clicked", true);
+      this.select.classList.toggle("select-clicked");
       // add arrow rotation style transition
-      this.arrow.classList.toggle("arrow-rotate", true);
+      this.arrow.classList.toggle("arrow-rotate");
       // add menu opening style transition
-      this.menu.classList.toggle("menu-open", true);
+      this.menu.classList.toggle("menu-open");
     });
 
     // click event for all menu options
     this.options.forEach((option) => {
       option.addEventListener("click", () => {
         // remove select-clicked class to prevent the style transition
-        this.select.classList.toggle("select-clicked", false);
+        this.select.classList.toggle("select-clicked");
         // remove rotating transition
-        this.arrow.classList.toggle("arrow-rotate", false);
+        this.arrow.classList.toggle("arrow-rotate");
         // remove menu opening style transition
-        this.menu.classList.toggle("menu-open", false);
+        this.menu.classList.toggle("menu-open");
         // remove active class from all menu items
         this.active.classList.remove("active");
         // add active class to currently clicked item from menu
@@ -319,6 +331,8 @@ class Dropdown {
 ////////////////////--------------------------------------------------------------------------------------------
 // FUNCTIONS ---------------------------------------------------------------------------------------------------
 // restarts game either by clicking restart at gameOver or restart button in menu
+
+// ----------------------------------------------------------------------------------------- regarding the game
 const restartGame = () => {
   // remove all existing game elements
   document.querySelector("#board").remove();
@@ -372,6 +386,9 @@ const gameOver = () => {
   });
 };
 
+const openInstructions = () => {};
+
+// -------------------------------------------------------------------- regarding board & tile element creation
 const resetBoard = () => {
   gridSize = newGridSize;
   gridCount = newGridCount;
@@ -419,6 +436,7 @@ const createTiles = () => {
   generateNew(maxInitialTiles, countTileValue(0));
 };
 
+// -------------------------------------------------------------------------------- general functions for reuse
 // counts total number of empty tiles left on the board
 const countTileValue = (val) => {
   // val = 1 refers to empty tiles, finding number of val = 2048 can trigger next event
@@ -434,6 +452,7 @@ const countTileValue = (val) => {
   return count;
 };
 
+// ------------------------------------------------------------------------ main functions for game interaction
 // generate new tiles at the end of each sliding step, only true if there are empty tiles
 const generateNew = (tileCount, emptyTiles) => {
   // function to get array of emptyTiles for randomized tile allocation
@@ -669,7 +688,7 @@ window.addEventListener(
 );
 
 // keyup has preventdefault to prevent scrollbar from moving, but when you keyup, keydown has to happen too, use this to prevent scrolling
-window.addEventListener("keydown", function (e) {
+window.addEventListener("keydown", (e) => {
   switch (e.key) {
     case "ArrowLeft":
     case "ArrowRight":
@@ -678,4 +697,8 @@ window.addEventListener("keydown", function (e) {
       e.preventDefault();
       break;
   }
+});
+
+instructButton.addEventListener("click", () => {
+  openInstructions();
 });
