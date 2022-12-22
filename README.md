@@ -1,14 +1,22 @@
 # 2048-derivative
 
-2048 is a popular puzzle game developed by Gabriele Cirulli back in 2014. With a simple gameplay of 4 sliding directions, the goal is to combine tiles of equal value to accumulate the score.
+2048 is a popular puzzle game developed by Gabriele Cirulli back in 2014. With a simple gameplay of 4 sliding directions, the goal is to combine tiles of equal value to accumulate the score. To read more about the game's history and rules, do check out [2048's wiki](<https://en.wikipedia.org/wiki/2048_(video_game)#:~:text=2048%20is%20a%20single%2Dplayer,Cirulli%20and%20published%20on%20GitHub.>)
 
 # Technologies used
+
+1. The HTML document consists of 3 main parts
 
 # General approach
 
 # Major hurdles
 
-1. Since the game interaction's sliding is triggered by arrow key presses, . Default scrolling of the browser window when the display is too large.
+1. Since the game interaction's sliding is triggered by arrow key presses, there still exists the default scrolling of the browser window when the display is too large. I tried removing event listener to prevent this issue, but it didn't work. After debugging with console.log(), I noticed that since I used keyup as a event listener, keydown has to happen in order to trigger keyup, since keyup can only happen after the key that is pressed down has been lifted. I figured that keydown could by default be enabling the scrollbar motion of the browser window.
+
+2. After the main sliding logic has been completed, the generation of new tiles at the end of each turn was still triggered although the tiles cannot be combined at a slide event. I implemented a function to check if the board's tile arrangement is the same before and after the slide function was invoked.
+
+3. Similarly, for the game over scenario to be triggered, I extended the duplicate checking for all 4 directions, to make sure that no other tiles can be combined or added onto the board.
+
+4. When implementing the gameover modal box, the arrow key press event listener should be deactivated to prevent any further triggering of the event. I tried removing event listener but it did not work. Even if it did, I would have to add it back at board reset. To prevent that, I added a gameState variable to toggle false for the invoking of the sliding function.
 
 # Unsolved problems / Future work
 
