@@ -6,6 +6,7 @@
 const body = document.querySelector("body");
 const header = document.querySelector("header");
 const footer = document.querySelector("footer");
+let dropdowns = null; // add this to collect array of dropdown buttons later on
 // let storeScore = 0;   // store best score to reassign best score value after removing DOM elements
 let score = document.querySelector("#score").innerHTML;
 let bestScore = document.querySelector("#best-score").innerHTML;
@@ -191,7 +192,8 @@ class Dropdown {
     (this.container = null),
       (this.select = null),
       (this.arrow = null),
-      (this.menu = null);
+      (this.menu = null),
+      (this.active = null);
   }
 
   updateDOM() {
@@ -200,6 +202,7 @@ class Dropdown {
     this.select = document.querySelector(".select");
     this.arrow = document.querySelector(".arrow");
     this.menu = document.querySelector(".menu");
+    this.active = document.querySelector(".active");
 
     // update dimensions - to match the tiles
     this.container.style.width = gridSize + "px";
@@ -215,6 +218,7 @@ class Dropdown {
     this.menu.style.backgroundColor = accentCol;
     this.menu.style.borderColor = maxValCol;
     this.menu.style.color = accentCol2;
+    this.active.style.backgroundColor = maxValCol;
   }
 }
 

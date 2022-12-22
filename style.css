@@ -80,6 +80,7 @@ footer {
 }
 
 .select {
+  /* selected item displayed on button */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -100,6 +101,7 @@ footer {
 }
 
 .arrow {
+  /* arrow icon in the drop down */
   width: 0;
   height: 0;
   border-left: 4px solid transparent;
@@ -114,8 +116,9 @@ footer {
 }
 
 .menu {
+  /* dropdown list */
   list-style: none;
-  padding: 0.2em 0.5em;
+  padding: 0.2em 0.3em;
   box-shadow: 0 0.5em 1em rgba(255, 255, 255, 0.1);
   border-radius: 0.5em;
 
@@ -124,22 +127,34 @@ footer {
   left: 50%;
   width: 100%;
   transform: translateX(-50%);
-  opacity: 1;
-  display: block;
+  opacity: 0;
+  display: none;
   transition: 0.2s;
   z-index: 1;
 }
 
 .menu li {
-  padding: 0.3em 0.5em;
+  /* all items in the list */
+  padding: 0.4em 0.6em;
   margin: 0.3em 0;
-  border-radius: 0.5em;
+  border-radius: 0.3em;
   cursor: pointer;
 }
 
 .menu li:hover {
   opacity: 70%;
   /* text-shadow: 0.1em 0.13m 1em rgba(255, 255, 255, 0.5); */
+}
+
+.active {
+  /* chosen item in the list */
+  box-shadow: 0.1em 0.1em 0.4em rgba(255, 255, 255, 0.1);
+}
+
+.menu-open {
+  /* javascript: transitions the dropdown from button click */
+  display: block;
+  opacity: 1;
 }
 
 /* fonts in footer */
