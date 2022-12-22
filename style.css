@@ -250,8 +250,24 @@ h2:hover {
 /* change text highlight colour based on colour palette chosen (in javascript) */
 :root {
   --highlight-color: null;
+  --translateTile-X: null;
+  --translateTile-Y: null;
 }
 
 ::selection {
   background-color: var(--highlight-color);
+}
+
+@keyframes combine {
+  from {
+    transform: translateX(--translateTile-X);
+    transform: translateY(--translateTile-Y);
+    scale: 80%;
+  }
+
+  to {
+    transform: translateX(--translateTile-X);
+    transform: translateY(--translateTile-Y);
+    scale: 100%;
+  }
 }

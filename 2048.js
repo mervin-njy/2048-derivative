@@ -172,7 +172,8 @@ class Tile {
       (this.y = rowInd),
       (this.num = num),
       (this.id = `t${this.x}${this.y}`),
-      (this.DOM = null);
+      (this.DOM = null),
+      (this.combined = false); // this boolean toggles if tile number is changed => triggers animation
   }
 
   // sets DOM element properties once createTiles() is invoked
@@ -242,7 +243,10 @@ class Tile {
         numFontSize - this.num.toString().length * 3 + "px";
     }
 
-    // add combine and slide animation keyframes here
+    // add combine and slide animation keyframes here by updating transformX and transformY values
+    // document.documentElement.style.setProperty("--transformTile-X", xformX);
+    // document.documentElement.style.setProperty("--transformTile-Y", xformY);
+    if (this.combined) this.DOM.style.animation = "combine 0.5s";
   }
 }
 
@@ -624,27 +628,34 @@ const combineTiles = (row) => {
 
   // 1. remove zero => e.g. from [0, 2, 2, 4]
   let newRow = filterZero(row); // to [2, 2, 4]
-  // 2. check adjacent value and combine
+
+  // 2a. check adjacent value and combine
+  // 2b. if combined, add true to combined array, else false
+  const combined = [];
   for (let c = 0; c < newRow.length - 1; c++) {
     if (newRow[c] === newRow[c + 1]) {
       newRow[c] *= 2;
       newRow[c + 1] = 0; // [2, 2, 4] => [4, 0, 4]
       score = score * 1 + newRow[c];
+      combined.push(true);
     }
   }
+
   // 3. remove zeroes again
   newRow = filterZero(newRow); // [4, 4]
-  // 4. add back zeroes to the back (while row is not full)
+
+  // 4a. add back zeroes to the back (while row is not full)
+  // 4b. add back false for tiles that are not combined
   while (newRow.length < gridCount) {
     newRow.push(0);
+    combined.push(false);
   }
-  return newRow;
+  return [newRow, combined];
 };
 
 // slide(dir) {} Logic
 const slide = (dir) => {
   console.log("Sliding " + dir);
-  console.log(allTiles);
   // for transposing array if dir === up and down
   const transposeArray = (nestedArray) => {
     const newArray = [];
@@ -660,6 +671,31 @@ const slide = (dir) => {
       }
     }
     return newArray;
+  };
+
+  const checkChange = (arrayOne, arrayTwo) => {
+    const changeArray = [];
+    // loops through each tile value for comparison
+    for (let r = 0; r < arrayOne.length; r++) {
+      let innerArray = [];
+      for (let c = 0; c < arrayOne[r].length; c++) {
+        // check if value has doubled after sliding
+        if (
+          arrayOne[r][c].num >= 2 &&
+          arrayOne[r][c].num * 2 === arrayTwo[r][c]
+        ) {
+          innerArray.push(true);
+        } else innerArray.push(false);
+        // refresh array at end of row/column array
+        if (c === arrayOne[r].length - 1) {
+          changeArray.push(innerArray);
+          innerArray = [];
+        }
+      }
+    }
+    console.log("Nested array of changes:");
+    console.log(changeArray);
+    return changeArray;
   };
 
   // checks arrays before and after sliding, if its the same, return false so generateTiles() does not get invoked
@@ -719,9 +755,11 @@ const slide = (dir) => {
   }
 
   let combinedArr = [];
+  let checkCombinedArr = [];
   // 1. loop through each row of Tiles to "flatten"
   for (let r = 0; r < initialArr.length; r++) {
     let currRow = [];
+    let checkCombinedRow = [];
     // 2. convert tile class array into array of their numbers
     for (const t of initialArr[r]) {
       currRow.push(t.num);
@@ -730,27 +768,39 @@ const slide = (dir) => {
     // 3. combine function
     if (dir === "left" || dir == "up") {
       // a. combine values and update as new row
-      currRow = combineTiles(currRow);
+      const checkRow = combineTiles(currRow);
+      currRow = checkRow[0];
+      checkCombinedRow = checkRow[1];
     } else if (dir === "right" || "down") {
       // b. manipulate row if slide dir is right
       currRow.reverse();
-      currRow = combineTiles(currRow);
+      const checkRow = combineTiles(currRow);
+      currRow = checkRow[0];
       currRow.reverse();
+      checkCombinedRow = checkRow[1];
+      checkCombinedRow.reverse();
     }
     combinedArr.push(currRow);
+    checkCombinedArr.push(checkCombinedRow);
   }
 
   if (dir === "up" || dir === "down") {
     combinedArr = transposeArray(combinedArr);
+    checkCombinedArr = transposeArray(checkCombinedArr);
   }
 
   // checks if after combination, array is the same: false => change / true => don't change
   if (checkDuplicate(allTiles, combinedArr) === false) {
-    // 4. convert numbers back to .num of each tile
+    // 4. convert numbers back to .num of each tile & check for combination animation
     // maps combinedArr values into allTiles' tile classes
     for (let r = 0; r < allTiles.length; r++) {
       allTiles[r].map((element, index) => {
+        // change number
         element.num = combinedArr[r][index];
+        // toggle boolean to trigger animation
+        if (checkCombinedArr[r][index] === true) element.combined = true;
+        else element.combined = false;
+
         element.updateDOM();
       });
     }
@@ -832,11 +882,7 @@ window.addEventListener("keydown", (e) => {
 });
 
 // triggers popup window to display instructions
-instructButton.addEventListener("click", () => {
-  openInstructions();
-});
+instructButton.addEventListener("click", () => openInstructions());
 
 // toggles fill tiles to show tiles w/ colour palette
-fillTilesButton.addEventListener("click", () => {
-  fillAllTiles();
-});
+fillTilesButton.addEventListener("click", () => fillAllTiles());
