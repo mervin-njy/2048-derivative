@@ -246,7 +246,13 @@ class Tile {
     // add combine and slide animation keyframes here by updating transformX and transformY values
     // document.documentElement.style.setProperty("--transformTile-X", xformX);
     // document.documentElement.style.setProperty("--transformTile-Y", xformY);
-    if (this.combined) this.DOM.style.animation = "combine 0.5s";
+    console.log(
+      `tile index ${this.id} has combination event: ${this.combined}`
+    );
+    if (this.combined) {
+      // this.DOM.style.animation = "combine 0.5s";
+      this.DOM.classList.toggle("tile-combine");
+    }
   }
 }
 
@@ -607,6 +613,7 @@ const generateNew = (tileCount, emptyTiles) => {
   // function to assign value in the tile's DOM
   const addVal = (tileToAdd) => {
     tileToAdd.num = Math.ceil(Math.random() * 2) * 2; // returns 2 or 4 randomly
+    tileToAdd.DOM.classList.toggle("tile-appear");
     tileToAdd.updateDOM(); // update values to DOM element's properties
     return 1;
   };
@@ -628,28 +635,29 @@ const combineTiles = (row) => {
 
   // 1. remove zero => e.g. from [0, 2, 2, 4]
   let newRow = filterZero(row); // to [2, 2, 4]
+  // 1b. if combined, add true to combined array, else false
+  let combined = [];
 
-  // 2a. check adjacent value and combine
-  // 2b. if combined, add true to combined array, else false
-  const combined = [];
+  // 2. check adjacent value and combine
   for (let c = 0; c < newRow.length - 1; c++) {
     if (newRow[c] === newRow[c + 1]) {
       newRow[c] *= 2;
       newRow[c + 1] = 0; // [2, 2, 4] => [4, 0, 4]
       score = score * 1 + newRow[c];
+      // 2b. fill up true and false similarly, and add 0 to be filtered out
       combined.push(true);
-    }
+      // combined.push(0);
+    } else combined.push(false);
   }
 
   // 3. remove zeroes again
   newRow = filterZero(newRow); // [4, 4]
+  combined = filterZero(combined);
 
   // 4a. add back zeroes to the back (while row is not full)
   // 4b. add back false for tiles that are not combined
-  while (newRow.length < gridCount) {
-    newRow.push(0);
-    combined.push(false);
-  }
+  while (newRow.length < gridCount) newRow.push(0);
+  while (combined.length < gridCount) combined.push(false);
   return [newRow, combined];
 };
 
@@ -671,31 +679,6 @@ const slide = (dir) => {
       }
     }
     return newArray;
-  };
-
-  const checkChange = (arrayOne, arrayTwo) => {
-    const changeArray = [];
-    // loops through each tile value for comparison
-    for (let r = 0; r < arrayOne.length; r++) {
-      let innerArray = [];
-      for (let c = 0; c < arrayOne[r].length; c++) {
-        // check if value has doubled after sliding
-        if (
-          arrayOne[r][c].num >= 2 &&
-          arrayOne[r][c].num * 2 === arrayTwo[r][c]
-        ) {
-          innerArray.push(true);
-        } else innerArray.push(false);
-        // refresh array at end of row/column array
-        if (c === arrayOne[r].length - 1) {
-          changeArray.push(innerArray);
-          innerArray = [];
-        }
-      }
-    }
-    console.log("Nested array of changes:");
-    console.log(changeArray);
-    return changeArray;
   };
 
   // checks arrays before and after sliding, if its the same, return false so generateTiles() does not get invoked
@@ -761,9 +744,7 @@ const slide = (dir) => {
     let currRow = [];
     let checkCombinedRow = [];
     // 2. convert tile class array into array of their numbers
-    for (const t of initialArr[r]) {
-      currRow.push(t.num);
-    }
+    for (const t of initialArr[r]) currRow.push(t.num);
 
     // 3. combine function
     if (dir === "left" || dir == "up") {
@@ -773,7 +754,7 @@ const slide = (dir) => {
       checkCombinedRow = checkRow[1];
     } else if (dir === "right" || "down") {
       // b. manipulate row if slide dir is right
-      currRow.reverse();
+      currRow.reverse(); // do not need to reverse checkCombinedRow since it's still empty
       const checkRow = combineTiles(currRow);
       currRow = checkRow[0];
       currRow.reverse();
@@ -791,10 +772,13 @@ const slide = (dir) => {
 
   // checks if after combination, array is the same: false => change / true => don't change
   if (checkDuplicate(allTiles, combinedArr) === false) {
+    console.log(checkCombinedArr);
     // 4. convert numbers back to .num of each tile & check for combination animation
     // maps combinedArr values into allTiles' tile classes
     for (let r = 0; r < allTiles.length; r++) {
       allTiles[r].map((element, index) => {
+        element.DOM.classList.toggle("tile-combine", false);
+        element.DOM.classList.toggle("tile-appear", false);
         // change number
         element.num = combinedArr[r][index];
         // toggle boolean to trigger animation

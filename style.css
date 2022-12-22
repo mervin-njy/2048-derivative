@@ -54,6 +54,13 @@ h3 {
   color: #17293d;
 }
 
+.tile-combine {
+  animation: combine 0.5s;
+}
+.tile-appear {
+  animation: appear 0.25s;
+}
+
 /* footer to contain instructions ---------------------------------------------------*/
 footer {
   display: flex;
@@ -268,6 +275,16 @@ h2:hover {
   to {
     transform: translateX(--translateTile-X);
     transform: translateY(--translateTile-Y);
+    scale: 100%;
+  }
+}
+
+@keyframes appear {
+  from {
+    scale: 110%;
+  }
+
+  to {
     scale: 100%;
   }
 }
