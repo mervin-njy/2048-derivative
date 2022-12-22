@@ -182,6 +182,34 @@ class Tile {
   }
 }
 
+class Dropdown {
+  constructor() {
+    (this.container = null),
+      (this.select = null),
+      (this.arrow = null),
+      (this.menu = null);
+  }
+
+  updateDOM() {
+    // assign this. properties with DOM selector
+    this.container = document.querySelector(".dropdown");
+    this.select = document.querySelector(".select");
+    this.arrow = document.querySelector(".arrow");
+    this.menu = document.querySelector(".menu");
+
+    // update dimensions
+    this.container.style.width = gridSize + "px";
+    this.container.style.margin = gridBorder / 4 + "px";
+    this.select.style.width = gridSize + "px";
+    this.select.style.border = gridBorder / 4 + "px solid";
+
+    // change colours
+    this.select.style.backgroundColor = maxValColIndex;
+    this.select.style.color = colPalette[0];
+    this.select.style.borderColor = colPalette[0];
+  }
+}
+
 ////////////////////--------------------------------------------------------------------------------------------
 // FUNCTIONS ---------------------------------------------------------------------------------------------------
 // restarts game either by clicking restart at gameOver or restart button in menu
@@ -251,6 +279,9 @@ const setBoard = () => {
   newBoard.constructDOM();
   // construct tiles after board is set up
   createTiles();
+  // update button dropdowns
+  // const newDropdown = new Dropdown();
+  // newDropdown.constructDOM();
 };
 
 // createTiles() {} logic triggered by setBoard()

@@ -135,3 +135,6 @@ Describing process:
 4. eventListeners
 
 5. functions
+
+10mins demo + code
+codes that are difficult/interesting 
