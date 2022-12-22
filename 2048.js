@@ -118,7 +118,7 @@ let docBackgroundCol = colPalette[Math.floor(colPalette.length * 0.8)];
 let accentCol = colPalette[Math.floor(colPalette.length * 0.7)];
 let accentCol2 = colPalette[Math.floor(colPalette.length * 0.4)];
 // base variables to change grid/tile parameters
-let gridCount = 5; // to be changed if resetBoard() is triggered later on
+let gridCount = 4; // to be changed if resetBoard() is triggered later on
 const newGridCount = 6;
 let gridSize = 100; // to be changed if resetBoard() triggered later on
 const newGridSize = (gridSize / newGridCount) * gridCount;
@@ -777,9 +777,9 @@ const slide = (dir) => {
     // maps combinedArr values into allTiles' tile classes
     for (let r = 0; r < allTiles.length; r++) {
       allTiles[r].map((element, index) => {
+        // set animations to false to reset toggle in updateDOM
         element.DOM.classList.toggle("tile-combine", false);
         element.DOM.classList.toggle("tile-appear", false);
-        element.DOM.classList.toggle("tile-slide", false);
         // change number
         element.num = combinedArr[r][index];
         // toggle boolean to trigger animation

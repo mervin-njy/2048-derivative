@@ -289,14 +289,14 @@ h2:hover {
   }
 }
 
-@keyframes slide {
+/* @keyframes slide {
   from {
-    transform: translateX(--translateTile-X);
-    transform: translateY(--translateTile-Y);
+    transform: translateX(var(--translateTile-X));
+    transform: translateY(var(--translateTile-Y));
   }
 
   to {
-    transform: translateX(--translateTile-X);
-    transform: translateY(--translateTile-Y);
+    transform: translateX(var(--translateTile-X));
+    transform: translateY(var(--translateTile-Y));
   }
-}
+} */
