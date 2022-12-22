@@ -57,9 +57,13 @@ const purplePalette = [
   "#332845", // border colour
 ];
 const colPalette = purplePalette;
-const maxValColIndex = colPalette[colPalette.length - 3];
-const emptyTileColIndex = colPalette[colPalette.length - 2];
-const borderColIndex = colPalette[colPalette.length - 1];
+const minValCol = colPalette[0];
+const maxValCol = colPalette[colPalette.length - 3];
+const emptyTileCol = colPalette[colPalette.length - 2];
+const borderCol = colPalette[colPalette.length - 1];
+const docBackgroundCol = colPalette[Math.floor(colPalette.length * 0.8)];
+const accentCol = colPalette[Math.floor(colPalette.length * 0.7)];
+const accentCol2 = colPalette[Math.floor(colPalette.length * 0.4)];
 // base variables to change grid/tile parameters
 let gridCount = 4; // to be changed if resetBoard() is triggered later on
 const newGridCount = 6;
@@ -81,8 +85,8 @@ class Board {
   }
 
   constructDOM() {
-    body.style.backgroundColor = maxValColIndex;
-    body.style.color = colPalette[0];
+    body.style.backgroundColor = maxValCol;
+    body.style.color = minValCol;
     header.style.width = gridSize * gridCount + "px";
     footer.style.width = gridSize * gridCount + "px";
     document.querySelector("#best-score").innerHTML = bestScore;
@@ -92,19 +96,19 @@ class Board {
     newBoard.style.width = gridSize * gridCount + "px";
     newBoard.style.height = gridSize * gridCount + "px";
     newBoard.style.border = gridBorder + "px solid";
-    newBoard.style.backgroundColor = maxValColIndex;
+    newBoard.style.backgroundColor = maxValCol;
     newBoard.style.borderRadius = gridBorder * 2 + "px";
-    newBoard.style.borderColor = maxValColIndex;
+    newBoard.style.borderColor = maxValCol;
 
     this.DOM = newBoard;
     header.after(newBoard);
   }
 
   updateColour() {
-    body.style.backgroundColor = maxValColIndex;
-    body.style.color = colPalette[0];
-    this.DOM.style.backgroundColor = maxValColIndex;
-    this.DOM.style.borderColor = maxValColIndex;
+    body.style.backgroundColor = maxValCol;
+    body.style.color = minValCol;
+    this.DOM.style.backgroundColor = maxValCol;
+    this.DOM.style.borderColor = maxValCol;
   }
 }
 
@@ -141,7 +145,7 @@ class Tile {
 
   updateColour() {
     // fixed border colour
-    this.DOM.style.borderColor = borderColIndex;
+    this.DOM.style.borderColor = borderCol;
     // change tile colours
     if (this.num <= 2048) {
       // Math.log(this.num) / Math.log(2) - 0 is the opposite of math.pow()
@@ -149,14 +153,14 @@ class Tile {
       this.DOM.style.backgroundColor =
         colPalette[Math.log(this.num) / Math.log(2) - 1];
     } else {
-      this.DOM.style.backgroundColor = maxValColIndex;
+      this.DOM.style.backgroundColor = maxValCol;
     }
 
     // after tile 8, the font colour changes to white
     if (this.num <= Math.pow(2, 3)) {
-      this.DOM.style.color = maxValColIndex;
+      this.DOM.style.color = maxValCol;
     } else {
-      this.DOM.style.color = colPalette[0];
+      this.DOM.style.color = minValCol;
     }
   }
 
@@ -170,7 +174,7 @@ class Tile {
       this.DOM.classList.add("t" + this.num);
     } else {
       this.DOM.innerText = ""; // don't display if number is 1 or math.pow(2,1)
-      this.DOM.style.backgroundColor = emptyTileColIndex;
+      this.DOM.style.backgroundColor = emptyTileCol;
     }
 
     this.DOM.style.fontSize = numFontSize + "px";
@@ -197,16 +201,20 @@ class Dropdown {
     this.arrow = document.querySelector(".arrow");
     this.menu = document.querySelector(".menu");
 
-    // update dimensions
+    // update dimensions - to match the tiles
     this.container.style.width = gridSize + "px";
-    this.container.style.margin = gridBorder / 4 + "px";
+    this.container.style.margin = (gridBorder * 3) / 4 + "px";
     this.select.style.width = gridSize + "px";
     this.select.style.border = gridBorder / 4 + "px solid";
+    this.menu.style.border = gridBorder / 4 + "px solid";
 
     // change colours
-    this.select.style.backgroundColor = maxValColIndex;
-    this.select.style.color = colPalette[0];
-    this.select.style.borderColor = colPalette[0];
+    this.select.style.backgroundColor = maxValCol;
+    this.select.style.color = minValCol;
+    this.select.style.borderColor = minValCol;
+    this.menu.style.backgroundColor = accentCol;
+    this.menu.style.borderColor = maxValCol;
+    this.menu.style.color = accentCol2;
   }
 }
 
@@ -232,7 +240,7 @@ const gameOver = () => {
   gameState = false; // stops eventlistener from ocurring when you slide tiles
   console.log("Game over. Would you like to restart?");
 
-  const mainColour = colPalette[Math.floor(colPalette.length * 0.8)];
+  const mainColour = docBackgroundCol;
   const accentColour = colPalette[0];
   // create HTML DOM: Modal & modal content
   // <div class="modal">
@@ -280,8 +288,8 @@ const setBoard = () => {
   // construct tiles after board is set up
   createTiles();
   // update button dropdowns
-  // const newDropdown = new Dropdown();
-  // newDropdown.constructDOM();
+  const newDropdown = new Dropdown();
+  newDropdown.updateDOM();
 };
 
 // createTiles() {} logic triggered by setBoard()

@@ -44,7 +44,7 @@ h3 {
   flex-wrap: wrap;
 
   margin: 30px auto;
-  background-color: #17293d;
+  box-shadow: 0.1em 0.1em 1.5em rgba(255, 255, 255, 0.3);
 }
 
 .tile {
@@ -64,13 +64,14 @@ footer {
 /* buttons for colour choices and admin choices ------------------*/
 #button-list {
   display: flex;
-  align-items: flex-start;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .dropdown {
-  min-width: 100px;
+  /* min-width: 100px; */
   position: relative;
-  margin: 4px;/* 2em; */
 }
 
 /* universal selector * selects all elements on the HTML page, in this case under .dropdown? */
@@ -80,13 +81,12 @@ footer {
 
 .select {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  border: 1px solid;
   border-radius: 0.5em;
   padding: 0.5em;
   cursor: pointer;
-  transition: backgruond 0.3s;
+  transition: background 0.3s;
 }
 
 .select:hover {
@@ -100,6 +100,46 @@ footer {
 }
 
 .arrow {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid #fff;
+  transition: 0.3s;
+}
+
+.arrow-rotate {
+  /* added in javascript */
+  transform: rotate(180deg);
+}
+
+.menu {
+  list-style: none;
+  padding: 0.2em 0.5em;
+  box-shadow: 0 0.5em 1em rgba(255, 255, 255, 0.1);
+  border-radius: 0.5em;
+
+  position: absolute;
+  top: 1.5em;
+  left: 50%;
+  width: 100%;
+  transform: translateX(-50%);
+  opacity: 1;
+  display: block;
+  transition: 0.2s;
+  z-index: 1;
+}
+
+.menu li {
+  padding: 0.3em 0.5em;
+  margin: 0.3em 0;
+  border-radius: 0.5em;
+  cursor: pointer;
+}
+
+.menu li:hover {
+  opacity: 70%;
+  /* text-shadow: 0.1em 0.13m 1em rgba(255, 255, 255, 0.5); */
 }
 
 /* fonts in footer */
