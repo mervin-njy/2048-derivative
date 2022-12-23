@@ -78,12 +78,12 @@ Remaining tasks:
 //    c. add variable for border, emptyTileBackground and discardTileBackground indices for easy access
     d. score border
 
-3. dropdown.AddEventListener for changing colours
-    a. add HTML element (button/dropdown) to trigger event LISTENERS
-    b. add other colour palettes
-    c. change colPalette value to chosen colour
+// 3. dropdown.AddEventListener for changing colours
+//    a. add HTML element (button/dropdown) to trigger event LISTENERS
+//    b. add other colour palettes
+//    c. change colPalette value to chosen colour
 
-4. button.AddEventlistener for instruction page
+// 4. button.AddEventlistener for instruction page
 
 5. dropdown.AddEventListener for setting value (admin button) to 
     a. random generate values to show gameOver

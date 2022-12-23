@@ -727,9 +727,7 @@ const slide = (dir) => {
   // then finally remap values onto tile DOM's innerText based on  actual tile class' .num property
   let initialArr = allTiles;
 
-  if (dir === "up" || dir === "down") {
-    initialArr = transposeArray(initialArr);
-  }
+  if (dir === "up" || dir === "down") initialArr = transposeArray(initialArr);
 
   let combinedArr = [];
   let checkCombinedArr = [];
@@ -802,11 +800,8 @@ const slide = (dir) => {
 ////////////////////--------------------------------------------------------------------------------------------
 // EVENT LISTENERS ---------------------------------------------------------------------------------------------
 // on window load, construct board to fill tiles
-window.addEventListener("load", (event) => {
+window.addEventListener("load", () => {
   console.log("game board is loaded");
-  //   alert(
-  //     "Welcome to 2048 revamped, read the instructions below and you may begin when you are ready."
-  //   );
   setBoard();
 });
 
@@ -838,8 +833,6 @@ window.addEventListener(
         case "Escape":
           // requestRestart()
           break;
-        default:
-          return; // Quit when this doesn't handle the key event
       }
     }
     e.preventDefault();
