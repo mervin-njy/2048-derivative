@@ -6,6 +6,8 @@ As my first project, it focuses on front-end development. After achieving the MV
 
 I'm also working on extending the rules of the game to create a surprise challenge upon reaching the first 2048 tile.
 
+Try it out [here](https://mervin-njy.github.io/2048-derivative/)!
+
 ### Technologies used
 
 **1. HTML:**
