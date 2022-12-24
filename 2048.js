@@ -118,7 +118,7 @@ let docBackgroundCol = colPalette[Math.floor(colPalette.length * 0.8)];
 let accentCol = colPalette[Math.floor(colPalette.length * 0.7)];
 let accentCol2 = colPalette[Math.floor(colPalette.length * 0.4)];
 // base variables to change grid/tile parameters
-let gridCount = 4; // to be changed if resetBoard() is triggered later on
+let gridCount = 5; // to be changed if resetBoard() is triggered later on
 const newGridCount = 6;
 let gridSize = 100; // to be changed if resetBoard() triggered later on
 const newGridSize = (gridSize / newGridCount) * gridCount;

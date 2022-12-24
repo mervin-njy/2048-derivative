@@ -4,25 +4,28 @@
 
 Since I did not like the default colour palette of the original game, I added a dropdown to vary colour palettes with various colour gradients.
 
-# Technologies used
+## Technologies used
 
-1. The HTML document consists of 3 main parts:
-   a. Header that illustrates the title and the scores.
-   b. Body that contains the board and tiles.
-   c. Footer that contains all the buttons for customization and instructions.
+**1. HTML**
+The document consists of 3 main parts:
+a. Header that illustrates the title and the scores.
+b. Body that contains the board and tiles.
+c. Footer that contains all the buttons for customization and instructions.
 
-2. The CSS styling includes various animation keyframes and transitions. However, since each tile has their own unique colour set, I decided to leave it out and add them in in javascript instead. This also helps with the change in colour palette as triggered by the dropdown selection.
+**2. CSS:**
+The styling includes various animation keyframes and transitions. However, since each tile has their own unique colour set, I decided to leave it out and add them in in javascript instead. This also helps with the change in colour palette as triggered by the dropdown selection.
 
-3. Javscript:
-   a. Classes are mostly used in the creation of board, tiles and dropdown menu/buttons. This is to assign properties such as DOM ID and tile's value for ease of access in the main script.
+**3. Javscript:**
+a. Classes are mostly used in the creation of board, tiles and dropdown menu/buttons. This is to assign properties such as DOM ID and tile's value for ease of access in the main script.
+b. Main event listeners are the keyup event for individual arrow keys for invoking the sliding function.
 
-# General approach
+## General approach
 
 The bulk of this game development relies on the logic of the tile combination. To do so, the tiles are handled by a array of the columns nested within an array of the rows. A sliding function is invoked based on the keypress direction, indicating which direction of "tile flushing" should happen. By default, we examine the tile flushing in the left direction which loops through each row of tiles as an array. To do so, the empty tiles are removed from comparison, and each tile is compared with the next. If they are the same value, the tile's value will be doubled, and the next tile will become empty. This ensures that the following tile does not combine with the first tile for double combination. The empty tiles will then be added back to the back of the array to make up the length of the row.
 
 This function is reused for the other flushing directions. Sliding right requires the reversal of the array before and after the row comparison occurs. For sliding upwards, the nested array is transposed to examine the column of tiles instead. Then the comparison takes place before transposing back to its original array arrangement. For sliding downwards, the order of action is transpose > reverse > compare > reverse > transpose.
 
-# Major hurdles
+## Major hurdles
 
 1. Since the game interaction's sliding is triggered by arrow key presses, there still exists the default scrolling of the browser window when the display is too large. I tried removing event listener to prevent this issue, but it didn't work. After debugging with console.log(), I noticed that since I used keyup as a event listener, keydown has to happen in order to trigger keyup, since keyup can only happen after the key that is pressed down has been lifted. I figured that keydown could by default be enabling the scrollbar motion of the browser window.
 
@@ -32,9 +35,9 @@ This function is reused for the other flushing directions. Sliding right require
 
 4. When implementing the gameover modal box, the arrow key press event listener should be deactivated to prevent any further triggering of the event. I tried removing event listener but it did not work. Even if it did, I would have to add it back at board reset. To prevent that, I added a gameState variable to toggle false for the invoking of the sliding function.
 
-# Unsolved problems / Future work
+## Unsolved problems / Future work
 
-UI:
+**UI:**
 
 1. Dropdown selection does not work when fill tiles button has been clicked.
 2. Restart button to be added.
@@ -45,7 +48,7 @@ Animation:
 1. Although animation of the tiles mostly appeared correctly, there are a few instances combine animation did not trigger.
 2. Apart from appear and combine animations of the tiles, sliding animation can help to visualize sliding direction better.
 
-Script:
+**Script:**
 
 One of the stretch goals was to incorporate a sudden death/clear tiles event once 2048 has been reached. This was the result of reaching 2048 too many times when I was addicted to the game.
 How it works:
