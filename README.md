@@ -51,7 +51,7 @@ Within the **combineTiles()**, I set a this.combined boolean for the tile's clas
 2. Restart button to be added.
 3. Dropdown selection to vary grid count variable, _i.e._, 3x3 grid, 4x4 grid, 5x5 grid.
 
-Animation:
+**Animation:**
 
 1. Although animation of the tiles mostly appeared correctly, there are a few instances combine animation did not trigger.
 2. Apart from appear and combine animations of the tiles, sliding animation can help to visualize sliding direction better.
