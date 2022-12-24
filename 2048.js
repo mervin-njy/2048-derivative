@@ -214,8 +214,8 @@ class Tile {
       this.DOM.style.backgroundColor = maxValCol;
     }
 
-    // after tile 8, the font colour changes to lightest shade of palette (contrast with dark background)
-    if (this.num <= Math.pow(2, 3)) {
+    // after tile 32, the font colour changes to lightest shade of palette (contrast with dark background)
+    if (this.num <= Math.pow(2, 5)) {
       this.DOM.style.color = maxValCol;
     } else {
       this.DOM.style.color = minValCol;
@@ -400,6 +400,13 @@ const resetValues = () => {
   allTiles = [];
   // reset score
   score = 0;
+  // reset dropdown
+  // remove style transition for click selection
+  dropdown.select.classList.toggle("select-clicked", false);
+  // remove style transition for arrow rotation
+  dropdown.arrow.classList.toggle("arrow-rotate", false);
+  // remove style transition for menu opening
+  dropdown.menu.classList.toggle("menu-open", false);
 };
 
 // resets the game other than best score
@@ -413,7 +420,7 @@ const restartGame = () => {
   // reset game state and reset board for new game
   gameState = true;
   // set board again to restart
-  setBoard();
+  setBoard(false);
 };
 
 // ends the game due to tiles running out
@@ -514,7 +521,7 @@ const fillAllTiles = () => {
   else fillTiles = false;
 
   // reset board - but create of tiles with new fillTiles boolean
-  setBoard();
+  setBoard(false); // false since this is not the first time setting the board, do not need to reassign listeners
 };
 
 // -------------------------------------------------------------------- regarding board & tile element creation
@@ -525,16 +532,19 @@ const resetBoard = () => {
 };
 
 // setBoard() {} logic triggered by window onload
-const setBoard = () => {
+const setBoard = (firstTime = true) => {
   // constructs new board element with properties based on grid count, default = 4
   board = new Board();
   board.constructDOM();
+
   // construct tiles after board is set up
   createTiles();
+
   // update button dropdowns
   dropdown = new Dropdown();
   dropdown.updateDOM();
-  dropdown.assignListeners();
+  // trigger dropdown menu upon click - very first time setting board
+  if (firstTime) dropdown.assignListeners();
 };
 
 // createTiles() {} logic triggered by setBoard()
@@ -853,6 +863,5 @@ window.addEventListener("keydown", (e) => {
 
 // triggers popup window to display instructions
 instructButton.addEventListener("click", () => openInstructions());
-
 // toggles fill tiles to show tiles w/ colour palette
 fillTilesButton.addEventListener("click", () => fillAllTiles());
