@@ -19,19 +19,19 @@ let bestScore = document.querySelector("#best-score").innerHTML;
 let gameState = true;
 // colour palette picker - [2, 4, 8.... >2048, emptyTileCol, board/borderCol]
 const defaultPalette = [
-  "#", // 2 + later font colors
-  "#", // 4
-  "#", // 8
-  "#", // 16
-  "#", // 32
-  "#", // 64
-  "#", // 128
-  "#", // 256
-  "#", // 512
-  "#", // 1024
-  "#", // >= 2048 + earlier font colors #390E06
-  "#", // 0
-  "#", // border colour
+  "#F1F5F7", // 2 + later font colors
+  "#D3DBDF", // 4
+  "#BFCBD0", // 8
+  "#A7B5BA", // 16
+  "#98A4A9", // 32
+  "#8B969B", // 64
+  "#7C888C", // 128
+  "#636E72", // 256
+  "#485154", // 512
+  "#2D3436", // 1024
+  "#161B1D", // >= 2048 + earlier font colors #390E06
+  "#A2A9AC", // 0
+  "#22282A", // border colour
 ];
 const redPalette = [
   "#F1E4E4", // 2 + later font colors
@@ -123,7 +123,7 @@ const purplePalette = [
   "#978E9F", // 0
   "#332845", // border colour
 ];
-let colPalette = greenPalette;
+let colPalette = defaultPalette;
 let minValCol = colPalette[0];
 let maxValCol = colPalette[colPalette.length - 3];
 let emptyTileCol = colPalette[colPalette.length - 2];
@@ -366,7 +366,9 @@ class Dropdown {
 
   resetColour() {
     // checks active colour to change colour palette
-    if (this.active.innerText === "red") {
+    if (this.active.innerText === "default") {
+      colPalette = defaultPalette;
+    } else if (this.active.innerText === "red") {
       colPalette = redPalette;
     } else if (this.active.innerText === "orange") {
       colPalette = orangePalette;
