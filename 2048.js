@@ -18,6 +18,21 @@ let score = document.querySelector("#score").innerHTML;
 let bestScore = document.querySelector("#best-score").innerHTML;
 let gameState = true;
 // colour palette picker - [2, 4, 8.... >2048, emptyTileCol, board/borderCol]
+const defaultPalette = [
+  "#", // 2 + later font colors
+  "#", // 4
+  "#", // 8
+  "#", // 16
+  "#", // 32
+  "#", // 64
+  "#", // 128
+  "#", // 256
+  "#", // 512
+  "#", // 1024
+  "#", // >= 2048 + earlier font colors #390E06
+  "#", // 0
+  "#", // border colour
+];
 const redPalette = [
   "#F1E4E4", // 2 + later font colors
   "#EED6D6", // 4
@@ -400,13 +415,6 @@ const resetValues = () => {
   allTiles = [];
   // reset score
   score = 0;
-  // reset dropdown
-  // remove style transition for click selection
-  dropdown.select.classList.toggle("select-clicked", false);
-  // remove style transition for arrow rotation
-  dropdown.arrow.classList.toggle("arrow-rotate", false);
-  // remove style transition for menu opening
-  dropdown.menu.classList.toggle("menu-open", false);
 };
 
 // resets the game other than best score
