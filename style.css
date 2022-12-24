@@ -11,7 +11,6 @@ header {
   display: flexbox;
   justify-content: center;
   margin: 20px auto;
-  width: 500px;
 }
 
 h1 {

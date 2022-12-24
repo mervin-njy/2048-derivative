@@ -134,7 +134,7 @@ let accentCol2 = colPalette[Math.floor(colPalette.length * 0.4)];
 // base variables to change grid/tile parameters
 let gridCount = 4; // to be changed if resetBoard() is triggered later on
 const newGridCount = 6;
-let gridSize = 100; // to be changed if resetBoard() triggered later on
+let gridSize = 90; // to be changed if resetBoard() triggered later on
 const newGridSize = (gridSize / newGridCount) * gridCount;
 const gridBorder = 4;
 const maxInitialTiles = 2;
