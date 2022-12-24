@@ -14,14 +14,13 @@ let allTiles = [];
 let instruction = document.querySelector(".instructions");
 let fillTiles = false; // fill tiles true => display tiles up to 2048 ++, fale => back to randomized starting
 let dropdown = null;
-// let storeScore = 0;   // store best score to reassign best score value after removing DOM elements
 let score = document.querySelector("#score").innerHTML;
 let bestScore = document.querySelector("#best-score").innerHTML;
 let gameState = true;
 // colour palette picker - [2, 4, 8.... >2048, emptyTileCol, board/borderCol]
 const redPalette = [
   "#F1E4E4", // 2 + later font colors
-  "#EBD2D2", // 4
+  "#EED6D6", // 4
   "#E7C1C1", // 8
   "#DCA8A8", // 16
   "#D19090", // 32
@@ -36,7 +35,7 @@ const redPalette = [
 ];
 const orangePalette = [
   "#FFECE5", // 2 + later font colors
-  "#ECC7B8", // 4
+  "#FAD7C9", // 4
   "#EBB8A4", // 8
   "#DCA690", // 16
   "#CB957F", // 32
@@ -53,14 +52,14 @@ const yellowPalette = [
   "#FFF9D3", // 2 + later font colors
   "#FFF4AF", // 4
   "#FFEF86", // 8
-  "#F5E894", // 16
-  "#ECDE82", // 32
-  "#E4D575", // 64
-  "#DACA5F", // 128
-  "#CEBE53", // 256
-  "#BFAE43", // 512
-  "#B0A038", // 1024
-  "#8C7C10", // >= 2048 + earlier font colors
+  "#F1E176", // 16
+  "#E1D263", // 32
+  "#CBBE5E", // 64
+  "#B8AD56", // 128
+  "#ACA35A", // 256
+  "#9F954F", // 512
+  "#988D47", // 1024
+  "#877D3D", // >= 2048 + earlier font colors
   "#D0CAA8", // 0
   "#93873B", // border colour
 ];
@@ -118,7 +117,7 @@ let docBackgroundCol = colPalette[Math.floor(colPalette.length * 0.8)];
 let accentCol = colPalette[Math.floor(colPalette.length * 0.7)];
 let accentCol2 = colPalette[Math.floor(colPalette.length * 0.4)];
 // base variables to change grid/tile parameters
-let gridCount = 5; // to be changed if resetBoard() is triggered later on
+let gridCount = 4; // to be changed if resetBoard() is triggered later on
 const newGridCount = 6;
 let gridSize = 100; // to be changed if resetBoard() triggered later on
 const newGridSize = (gridSize / newGridCount) * gridCount;
