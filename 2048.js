@@ -289,18 +289,21 @@ class Dropdown {
     // dimension calculations
     const border = gridBorder / 4;
     const margin = (gridBorder * 3) / 4;
-    const width = gridSize - (margin + border) * 4;
+    const width = gridSize - (margin + border) * 3;
     // update dimensions (of dropdown DOM) - to match the tiles
     this.container.style.width = width + "px";
     this.container.style.margin = margin + "px";
     this.select.style.width = width + "px";
     this.select.style.border = border + "px solid";
+    this.select.style.fontSize = width * 0.15 + "px";
     this.menu.style.border = border + "px solid";
+    this.menu.style.fontSize = width * 0.16 + "px";
     // update dimensions (of buttons as well) - to match the tiles
     const buttonDimension = (btn) => {
       btn.style.width = width + "px";
       btn.style.margin = margin + "px";
       btn.style.border = border + "px solid";
+      btn.style.fontSize = width * 0.15 + "px";
     };
     buttonDimension(instructButton);
     buttonDimension(fillTilesButton);

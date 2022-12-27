@@ -302,7 +302,10 @@ h2:hover {
 
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
-  * {
-    width: 80%;
+  header,
+  #board,
+  footer {
+    max-width: 400px;
+    margin: 0 10em;
   }
 }
