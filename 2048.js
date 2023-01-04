@@ -18,112 +18,114 @@ let score = document.querySelector("#score").innerHTML;
 let bestScore = document.querySelector("#best-score").innerHTML;
 let gameState = true;
 // colour palette picker - [2, 4, 8.... >2048, emptyTileCol, board/borderCol]
-const defaultPalette = [
-  "#F1F5F7", // 2 + later font colors
-  "#D3DBDF", // 4
-  "#BFCBD0", // 8
-  "#A7B5BA", // 16
-  "#98A4A9", // 32
-  "#8B969B", // 64
-  "#7C888C", // 128
-  "#636E72", // 256
-  "#485154", // 512
-  "#2D3436", // 1024
-  "#161B1D", // >= 2048 + earlier font colors #390E06
-  "#A2A9AC", // 0
-  "#22282A", // border colour
-];
-const redPalette = [
-  "#F1E4E4", // 2 + later font colors
-  "#EED6D6", // 4
-  "#E7C1C1", // 8
-  "#DCA8A8", // 16
-  "#D19090", // 32
-  "#C47D7D", // 64
-  "#A76060", // 128
-  "#904E4E", // 256
-  "#7A3C3C", // 512
-  "#652C2C", // 1024
-  "#491C1C", // >= 2048 + earlier font colors #390E06
-  "#BFA49F", // 0
-  "#582B2B", // border colour
-];
-const orangePalette = [
-  "#FFECE5", // 2 + later font colors
-  "#FAD7C9", // 4
-  "#EBB8A4", // 8
-  "#DCA690", // 16
-  "#CB957F", // 32
-  "#B8816D", // 64
-  "#A5705C", // 128
-  "#95614E", // 256
-  "#7F5343", // 512
-  "#6F4636", // 1024
-  "#603A2D", // >= 2048 + earlier font colors
-  "#BDB0A7", // 0
-  "#453228", // border colour
-];
-const yellowPalette = [
-  "#FFF9D3", // 2 + later font colors
-  "#FFF4AF", // 4
-  "#FFEF86", // 8
-  "#F1E176", // 16
-  "#E1D263", // 32
-  "#CBBE5E", // 64
-  "#B8AD56", // 128
-  "#ACA35A", // 256
-  "#9F954F", // 512
-  "#988D47", // 1024
-  "#877D3D", // >= 2048 + earlier font colors
-  "#D0CAA8", // 0
-  "#93873B", // border colour
-];
-const greenPalette = [
-  "#D5EFF0", // 2 + later font colors
-  "#AACECE", // 4
-  "#80B5B5", // 8
-  "#6EA0A0", // 16
-  "#598E8E", // 32
-  "#497D7D", // 64
-  "#3C7373", // 128
-  "#336969", // 256
-  "#285B5B", // 512
-  "#214E4E", // 1024
-  "#1B3333", // >= 2048 + earlier font colors
-  "#80918C", // 0
-  "#284445", // border colour
-];
-const bluePalette = [
-  "#eef6ff", // 2 + later font colors
-  "#D2E5FA", // 4
-  "#a8c4e4", // 8
-  "#789cc2", // 16
-  "#53779d", // 32
-  "#416082", // 64
-  "#2E4F71", // 128
-  "#23415F", // 256
-  "#183453", // 512
-  "#11263E", // 1024
-  "#0B1A2C", // >= 2048 + earlier font colors
-  "#929ca7", // 0
-  "#283845", // border colour
-];
-const purplePalette = [
-  "#F7EDFF", // 2 + later font colors
-  "#E0D5F3", // 4 -- CHANGE THIS
-  "#D2C4E7", // 8
-  "#BDAED5", // 16
-  "#B0A0CB", // 32
-  "#9E8DBA", // 64
-  "#84759A", // 128
-  "#6B5C82", // 256
-  "#53456A", // 512
-  "#44365B", // 1024
-  "#2B2039", // >= 2048 + earlier font colors
-  "#978E9F", // 0
-  "#332845", // border colour
-];
-let colPalette = defaultPalette;
+const colourPalettes = {
+  default: [
+    "#F1F5F7", // 2 + later font colors
+    "#D3DBDF", // 4
+    "#BFCBD0", // 8
+    "#A7B5BA", // 16
+    "#98A4A9", // 32
+    "#8B969B", // 64
+    "#7C888C", // 128
+    "#636E72", // 256
+    "#485154", // 512
+    "#2D3436", // 1024
+    "#161B1D", // >= 2048 + earlier font colors #390E06
+    "#A2A9AC", // 0
+    "#22282A", // border colour
+  ],
+  red: [
+    "#F1E4E4", // 2 + later font colors
+    "#EED6D6", // 4
+    "#E7C1C1", // 8
+    "#DCA8A8", // 16
+    "#D19090", // 32
+    "#C47D7D", // 64
+    "#A76060", // 128
+    "#904E4E", // 256
+    "#7A3C3C", // 512
+    "#652C2C", // 1024
+    "#491C1C", // >= 2048 + earlier font colors #390E06
+    "#BFA49F", // 0
+    "#582B2B", // border colour
+  ],
+  orange: [
+    "#FFECE5", // 2 + later font colors
+    "#FAD7C9", // 4
+    "#EBB8A4", // 8
+    "#DCA690", // 16
+    "#CB957F", // 32
+    "#B8816D", // 64
+    "#A5705C", // 128
+    "#95614E", // 256
+    "#7F5343", // 512
+    "#6F4636", // 1024
+    "#603A2D", // >= 2048 + earlier font colors
+    "#BDB0A7", // 0
+    "#453228", // border colour
+  ],
+  yellow: [
+    "#FFF9D3", // 2 + later font colors
+    "#FFF4AF", // 4
+    "#FFEF86", // 8
+    "#F1E176", // 16
+    "#E1D263", // 32
+    "#CBBE5E", // 64
+    "#B8AD56", // 128
+    "#ACA35A", // 256
+    "#9F954F", // 512
+    "#988D47", // 1024
+    "#877D3D", // >= 2048 + earlier font colors
+    "#D0CAA8", // 0
+    "#93873B", // border colour
+  ],
+  green: [
+    "#D5EFF0", // 2 + later font colors
+    "#AACECE", // 4
+    "#80B5B5", // 8
+    "#6EA0A0", // 16
+    "#598E8E", // 32
+    "#497D7D", // 64
+    "#3C7373", // 128
+    "#336969", // 256
+    "#285B5B", // 512
+    "#214E4E", // 1024
+    "#1B3333", // >= 2048 + earlier font colors
+    "#80918C", // 0
+    "#284445", // border colour
+  ],
+  blue: [
+    "#eef6ff", // 2 + later font colors
+    "#D2E5FA", // 4
+    "#a8c4e4", // 8
+    "#789cc2", // 16
+    "#53779d", // 32
+    "#416082", // 64
+    "#2E4F71", // 128
+    "#23415F", // 256
+    "#183453", // 512
+    "#11263E", // 1024
+    "#0B1A2C", // >= 2048 + earlier font colors
+    "#929ca7", // 0
+    "#283845", // border colour
+  ],
+  purple: [
+    "#F7EDFF", // 2 + later font colors
+    "#E0D5F3", // 4 -- CHANGE THIS
+    "#D2C4E7", // 8
+    "#BDAED5", // 16
+    "#B0A0CB", // 32
+    "#9E8DBA", // 64
+    "#84759A", // 128
+    "#6B5C82", // 256
+    "#53456A", // 512
+    "#44365B", // 1024
+    "#2B2039", // >= 2048 + earlier font colors
+    "#978E9F", // 0
+    "#332845", // border colour
+  ],
+};
+let colPalette = colourPalettes.default;
 let minValCol = colPalette[0];
 let maxValCol = colPalette[colPalette.length - 3];
 let emptyTileCol = colPalette[colPalette.length - 2];
@@ -369,21 +371,7 @@ class Dropdown {
 
   resetColour() {
     // checks active colour to change colour palette
-    if (this.active.innerText === "default") {
-      colPalette = defaultPalette;
-    } else if (this.active.innerText === "red") {
-      colPalette = redPalette;
-    } else if (this.active.innerText === "orange") {
-      colPalette = orangePalette;
-    } else if (this.active.innerText === "yellow") {
-      colPalette = yellowPalette;
-    } else if (this.active.innerText === "green") {
-      colPalette = greenPalette;
-    } else if (this.active.innerText === "blue") {
-      colPalette = bluePalette;
-    } else if (this.active.innerText === "purple") {
-      colPalette = purplePalette;
-    }
+    colPalette = colourPalettes[this.active.innerText];
     console.log("resetting colour");
     // update colour variables
     minValCol = colPalette[0];
